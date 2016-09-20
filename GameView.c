@@ -6,11 +6,17 @@
 #include "Game.h"
 #include "GameView.h"
 // #include "Map.h" ... if you decide to use the Map ADT
-     
+#define NUM_TRAPS 10
+struct trap{
+   int turnPlaced;
+   int location;
+
+}
 struct gameView {
     Round currRound;
     PlayerID currPlayer;
     int score;
+    trap trapArray[NUM_TRAPS];
     PlayerID trail[NUM_PLAYERS][TRAIL_SIZE];
     int health[NUM_PLAYERS];
     int currLocation[NUM_PLAYERS];
@@ -33,6 +39,7 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
 void disposeGameView(GameView toBeDeleted)
 {
     //COMPLETE THIS IMPLEMENTATION
+    
     free( toBeDeleted );
 }
 
