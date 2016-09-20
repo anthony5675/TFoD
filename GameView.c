@@ -8,8 +8,14 @@
 // #include "Map.h" ... if you decide to use the Map ADT
      
 struct gameView {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    int hello;
+    Round currRound;
+    PlayerID currPlayer;
+    int score;
+    PlayerID trail[NUM_PLAYERS][TRAIL_SIZE];
+    int health[NUM_PLAYERS];
+    int currLocation[NUM_PLAYERS];
+    int location[NUM_PLAYERS][TRAIL_SIZE];
+    Map m;
 };
      
 
