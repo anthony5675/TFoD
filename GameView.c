@@ -30,7 +30,7 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
     GameView gameView = malloc(sizeof(struct gameView));
-    gameView->hello = 42;
+    gameView->score = 366;
     return gameView;
 }
      
@@ -39,8 +39,7 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
 void disposeGameView(GameView toBeDeleted)
 {
     //COMPLETE THIS IMPLEMENTATION
-    
-    free( toBeDeleted );
+    free( toBeDeleted);
 }
 
 
