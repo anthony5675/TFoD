@@ -7,6 +7,7 @@
 #include "GameView.h"
 // #include "Map.h" ... if you decide to use the Map ADT
 #define NUM_TRAPS 18
+#define NUM_IMVAMP 3
 struct trap{
    int turnPlaced;
    int location;
@@ -17,6 +18,7 @@ struct gameView {
     PlayerID currPlayer;
     int score;
     trap trapArray[NUM_TRAPS];
+    trap imVampArray[NUM_IMVAMP];
     PlayerID trail[NUM_PLAYERS][TRAIL_SIZE];
     int health[NUM_PLAYERS];
     int currLocation[NUM_PLAYERS];
