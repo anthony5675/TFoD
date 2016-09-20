@@ -2,6 +2,7 @@
 
 #include <stdlib.h>
 #include <assert.h>
+#include <string.h>
 #include "Globals.h"
 #include "Game.h"
 #include "GameView.h"
@@ -9,15 +10,17 @@
 #include "Map.h"
 #define NUM_TRAPS 18
 #define NUM_IMVAMP 3
+#define MOVE_LENGTH 7
 /*struct trap{
    int turnPlaced;
    int location;
 }
 */
 struct gameView {
-    Round currRound;
+    Round currRound; //Round consists of 5 player turns;
     PlayerID currPlayer;
     int score;
+    int turns;
     //trap trapArray[NUM_TRAPS];
     //trap imVampArray[NUM_IMVAMP];
     PlayerID trail[NUM_PLAYERS][TRAIL_SIZE];
@@ -31,9 +34,16 @@ struct gameView {
 // Creates a new GameView to summarise the current state of the game
 GameView newGameView(char *pastPlays, PlayerMessage messages[])
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
     GameView gameView = malloc(sizeof(struct gameView));
-    gameView->score = 366;
+    
+    gameView->m = newMap();
+    //See "The Data" page on webcms for more info.
+    gameView->turns = (strlen(pastPlays)+1)/(MOVE_LENGTH + 1);
+    gameView->currRound = gameView->turns/NUM_PLAYERS;
+
+    gameView->score = GAME_START_SCORE;
+    gameView->score -= (gameView->round)/NUM_PLAYERS; //-1 loss for each of D's turn
+                                 
     return gameView;
 }
      
@@ -59,7 +69,7 @@ Round getRound(GameView currentView)
 PlayerID getCurrentPlayer(GameView currentView)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return currentView->currPlayer;
+    return (currentView->currPlayer %NUM_PLAYERS);
 }
 
 // Get the current score
