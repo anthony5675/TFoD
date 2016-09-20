@@ -69,7 +69,7 @@ Round getRound(GameView currentView)
 PlayerID getCurrentPlayer(GameView currentView)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return (currentView->currPlayer %NUM_PLAYERS);
+    return (PlayerID( currentView->turns % NUM_PLAYERS));
 }
 
 // Get the current score
