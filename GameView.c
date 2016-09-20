@@ -6,7 +6,7 @@
 #include "Game.h"
 #include "GameView.h"
 // #include "Map.h" ... if you decide to use the Map ADT
-#define NUM_TRAPS 10
+#define NUM_TRAPS 18
 struct trap{
    int turnPlaced;
    int location;
