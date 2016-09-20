@@ -22,8 +22,8 @@ struct gameView {
     //trap imVampArray[NUM_IMVAMP];
     PlayerID trail[NUM_PLAYERS][TRAIL_SIZE];
     int health[NUM_PLAYERS];
-    int currLocation[NUM_PLAYERS];
-    int location[NUM_PLAYERS][TRAIL_SIZE];
+    LocationID currLocation[NUM_PLAYERS];
+    LocationID location[NUM_PLAYERS][TRAIL_SIZE];
     Map m;
 };
      
@@ -66,21 +66,21 @@ PlayerID getCurrentPlayer(GameView currentView)
 int getScore(GameView currentView)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    return currentView->score;
 }
 
 // Get the current health points for a given player
 int getHealth(GameView currentView, PlayerID player)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    return currentView->health[player];
 }
 
 // Get the current location id of a given player
 LocationID getLocation(GameView currentView, PlayerID player)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    return currentView->currLocation[player];
 }
 
 //// Functions that return information about the history of the game
