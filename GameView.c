@@ -42,7 +42,7 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
     gameView->currRound = gameView->turns/NUM_PLAYERS;
 
     gameView->score = GAME_START_SCORE;
-    gameView->score -= gameView->round; //-1 loss for each of D's turn
+    gameView->score -= gameView->currRound; //-1 loss for each of D's turn
                                  
     return gameView;
 }
