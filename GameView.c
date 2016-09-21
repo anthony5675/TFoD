@@ -12,6 +12,10 @@
 #define NUM_TRAPS 18
 #define NUM_IMVAMP 3
 #define MOVE_LENGTH 7
+
+//Helper Functions
+static void playerLocation (GameView gameView, char *pastPlays);
+
 /*struct trap{
    int turnPlaced;
    int location;
