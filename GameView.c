@@ -185,6 +185,8 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
         }
         m++;
     }
+    
+    free(abbrev);
                                  
     return gameView;
 }
