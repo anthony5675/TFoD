@@ -153,6 +153,38 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
         }
         i += 8;
     }
+    
+    //Filling the trail arrays.
+    int m, n = 0;
+    int o = (gameView->turns % NUM_PLAYERS) - 1;
+    int index = sizeof(pastPlays) - 6;
+    char *abbrev = malloc (3*sizeof(char));
+    abbrev[2] = '\0';
+     
+    if (index < 0) {
+        index = 0;
+    }
+    while (m < TRAIL_SIZE) {
+        n = 0;
+        while (n < NUM_PLAYERS) {
+            if (index != 0) {
+                abbrev[0] = pastPlays[index];
+                abbrev[1] = pastPlays[index + 1];
+                gameView->trail[o][m] = abbrevToID(abbrev);
+            } else {
+                gameView->trail[o][m] = UNKNOWN_LOCATION;
+            }
+            n++; o--;
+            if (o < 0) {
+                o = PLAYER_DRACULA;                        
+            }
+            index -= 8;
+            if (index < 1) {
+                index = 0;
+            } 
+        }
+        m++;
+    }
                                  
     return gameView;
 }
