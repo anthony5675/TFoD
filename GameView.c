@@ -139,6 +139,32 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
                                LocationID from, PlayerID player, Round round,
                                int road, int rail, int sea)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+   assert(0 <= player < 5);
+   assert(0 <= LocationID < currentView->m->nV);
+   int numlocs = 0;
+   int type;
+   VList curLink= currentView->m->connections[from];
+   while(curLink != NULL){
+      if((rail == TRUE && curLink->type == RAIL) || (road == TRUE && curLink->type == ROAD || (boat == TRUE && curLink->type = BOAT && player != PLAYER_DRACULA)){
+         numlocs++;
+      }
+   LocationID 
+   VList curLink= currentView->m->connections[from];
+   /*
+   while(curLink != NULL){
+      if((rail == TRUE && curLink->type == RAIL) || (road == TRUE && curLink->type == ROAD || (boat == TRUE && curLink->type = BOAT &&player !=    PLAYER_DRACULA)){
+         numlocs++;
+      }
+      else if(road == TRUE && curLink->type == ROAD){
+         numlocs++;
+      }
+      else if(boat == TRUE && curLink->type = BOAT &&player != PLAYER_DRACULA){
+         numlocs++;
+      }
+      curLink = curLink->next;
+   }
+   *numLocations = numlocs;
+*/
+
     return NULL;
 }
