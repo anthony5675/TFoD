@@ -85,6 +85,9 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
                 if (j % 8 == 1) {
                     if (pastPlays[i+j] == pastPlays[i+j-40] && pastPlays[i+j+1] == pastPlays[i+j+1-40]) {
                         gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS)] += LIFE_GAIN_REST;
+                        if (gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS)] > 9) {
+                           gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS)] = 9;
+                        }
                     }
                 }
                 j++;
