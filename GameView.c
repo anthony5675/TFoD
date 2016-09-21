@@ -38,7 +38,6 @@ struct gameView {
 };
      
 
-// Creates a new GameView to summarise the current state of the game
 GameView newGameView(char *pastPlays, PlayerMessage messages[])
 {
     GameView gameView = malloc(sizeof(struct gameView));
@@ -51,13 +50,38 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
     gameView->score = GAME_START_SCORE;
     gameView->score -= gameView->currRound; //-1 loss for each of D's turn
     
+<<<<<<< HEAD
     //New Stuff
     gameView->currPlayer = turns % 5;
     
     int i = 0;
+=======
+    playerLocation(gameView, &pastPlays);
+
+    gameView->currPlayer = (gameView->turns) % 5;
+
+    //Initialising health values.
+    int l = 0;    
+    for (l = 0; l < NUM_PLAYERS; l++) {
+        if (l == PLAYER_DRACULA) {
+            gameView->health[l] = GAME_START_BLOOD_POINTS ;
+        } else {
+            gameView->health[l] = GAME_START_HUNTER_LIFE_POINTS;
+        };
+    }
+    
+    int i, j, k = 0;
+>>>>>>> ee6d1902897b5fe0d2acca0c402d9dfa73f5d987
     while (pastPlays[i] != '\0') {
         if (i % NUM_PLAYERS < PLAYER_DRACULA) {
             j = 0;
+<<<<<<< HEAD
+=======
+            //If Hunter was teleported to St Joseph/Mary last round.
+            if (gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS] == 0) {
+               gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS] = GAME_START_HUNTER_LIFE_POINTS;
+            }
+>>>>>>> ee6d1902897b5fe0d2acca0c402d9dfa73f5d987
             while ( j <= 6) {
                 switch (pastPlays[i+j]) {
                     case 'S':
@@ -66,17 +90,24 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
                         }
                     case 'T':
                         if (j % 8 == 3) {
-                            gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS)] -= LIFE_LOSS_TRAP_ENCOUNTER; 
+                            gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS] -= LIFE_LOSS_TRAP_ENCOUNTER; 
                         } break;
                     case 'D':
                         if (j % 8 == 5) {
-                            gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS)] -= LIFE_LOSS_DRACULA_ENCOUNTER;
+                            gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS] -= LIFE_LOSS_DRACULA_ENCOUNTER;
                             gameView->health[PLAYER_DRACULA] -= LIFE_LOSS_HUNTER_ENCOUNTER;
                         } break;                      
                 }
                 if (j % 8 == 1) {
                     if (pastPlays[i+j] == pastPlays[i+j-40] && pastPlays[i+j+1] == pastPlays[i+j+1-40]) {
+<<<<<<< HEAD
                         gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS)] += LIFE_GAIN_REST;
+=======
+                        gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS] += LIFE_GAIN_REST;
+                        if (gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS] > 9) {
+                           gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS] = 9;
+                        }
+>>>>>>> ee6d1902897b5fe0d2acca0c402d9dfa73f5d987
                     }
                 }
                 j++;
@@ -129,6 +160,65 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
         }
         i += 8;
     }
+    
+    //Filling the trail arrays.
+    int m, n = 0;
+    int o = (gameView->turns % NUM_PLAYERS) - 1;
+    int index = sizeof(pastPlays) - 6;
+    char *abbrev = malloc (3*sizeof(char));
+    abbrev[2] = '\0';
+    
+    char *checkCity = "C?";
+    char *checkSea = "S?";
+    char *checkTeleport = "TP";
+    char *checkHide = "HI";
+     
+    while (m < TRAIL_SIZE) {
+        n = 0;
+        while (n < NUM_PLAYERS) {
+            if (index != 0) {
+                abbrev[0] = pastPlays[index];
+                abbrev[1] = pastPlays[index + 1];
+                
+                if (strcmp (abbrev, checkCity) == 0) { //string comparison, 0 is equal
+                    gameView->trail[o][m] = CITY_UNKNOWN;
+                } else if (strcmp (abbrev, checkSea) == 0) {
+                    gameView->trail[o][m] = SEA_UNKNOWN;
+                } else if (abbrev[0] == 'D') { //double back
+                    if (abbrev[1] == '1') {
+                        gameView->trail[o][m] = DOUBLE_BACK_1;
+                    } else if (abbrev[1] == '2') {
+                        gameView->trail[o][m] = DOUBLE_BACK_2;
+                    } else if (abbrev[1] == '3') {
+                        gameView->trail[o][m] = DOUBLE_BACK_3;
+                    } else if (abbrev[1] == '4') {
+                        gameView->trail[o][m] = DOUBLE_BACK_4;
+                    } else if (abbrev[1] == '5') {
+                        gameView->trail[o][m] = DOUBLE_BACK_5;
+                    }
+                } else if (strcmp (abbrev, checkTeleport) == 0) {
+                    gameView->trail[o][m] == TELEPORT;
+                } else if (strcmp (abbrev, checkHide) == 0) {
+                    gameView->trail[o][m] =HIDE;
+                } else {
+                    gameView->trail[o][m] = abbrevToID(abbrev);
+                }
+            } else {
+                gameView->trail[o][m] = UNKNOWN_LOCATION;
+            }
+            n++; o--;
+            if (o < 0) {
+                o = PLAYER_DRACULA;                        
+            }
+            index -= 8;
+            if (index < 1) {
+                index = 0;
+            } 
+        }
+        m++;
+    }
+    
+    free(abbrev);
                                  
     return gameView;
 }
@@ -221,16 +311,42 @@ static void playerLocation (GameView gameView, char *pastPlays) {
             gameView->currLocation[PLAYER_MINA_HARKER] = abbrevToID(abbrev);
             free(abbrev);
         } else if (*ptr == 'D') {
-            //NEED TO FIX THIS FOR HIDING, DOUBLE BACK AND OTHER SHIT
             char *abbrev = malloc (3*sizeof(char));
             abbrev[0] = *(ptr+1);
             abbrev[1] = *(ptr+2);
             abbrev[2] = '\0';
-            gameView->currLocation[PLAYER_DRACULA] = abbrevToID(abbrev);
+
+            char *checkCity = "C?";
+            char *checkSea = "S?";
+            char *checkTeleport = "TP";
+            char *checkHide = "HI";
+
+            if (strcmp (abbrev, checkCity) == 0) { //string comparison, 0 is equal
+                gameView->currLocation[PLAYER_DRACULA] = CITY_UNKNOWN;
+            } else if (strcmp (abbrev, checkSea) == 0) {
+                gameView->currLocation[PLAYER_DRACULA] = SEA_UNKNOWN;
+            } else if (abbrev[0] == 'D') { //double back
+                if (abbrev[1] == '1') {
+                    gameView->currLocation[PLAYER_DRACULA] = DOUBLE_BACK_1;
+                } else if (abbrev[1] == '2') {
+                    gameView->currLocation[PLAYER_DRACULA] = DOUBLE_BACK_2;
+                } else if (abbrev[1] == '3') {
+                    gameView->currLocation[PLAYER_DRACULA] = DOUBLE_BACK_3;
+                } else if (abbrev[1] == '4') {
+                    gameView->currLocation[PLAYER_DRACULA] = DOUBLE_BACK_4;
+                } else if (abbrev[1] == '5') {
+                    gameView->currLocation[PLAYER_DRACULA] = DOUBLE_BACK_5;
+                }
+            } else if (strcmp (abbrev, checkTeleport) == 0) {
+                gameView->currLocation[PLAYER_DRACULA] == TELEPORT;
+            } else if (strcmp (abbrev, checkHide) == 0) {
+                gameView->currLocation[PLAYER_DRACULA] =HIDE;
+            } else {
+                gameView->currLocation[PLAYER_DRACULA] = abbrevToID(abbrev);
+            }
             free(abbrev);
         }
         ptr += (MOVE_LENGTH + 1);
-
     }
 }
 
@@ -258,8 +374,15 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
    int type;
    VList curLink= currentView->m->connections[from];
    while(curLink != NULL){
+<<<<<<< HEAD
       if((road == TRUE && curLink->type == ROAD) || (boat == TRUE && curLink->type = BOAT)){
         InsertInto(s,idToName(curLink->v));
+=======
+      if((rail == TRUE && curLink->type == RAIL) || 
+        (road == TRUE && curLink->type == ROAD) || 
+        (boat == TRUE && curLink->type = BOAT && player != PLAYER_DRACULA)){
+         numlocs++;
+>>>>>>> ee6d1902897b5fe0d2acca0c402d9dfa73f5d987
       }
 if(rail == TRUE && player != PLAYER_DRACULA){
     enterQueue(q,)
