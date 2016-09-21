@@ -64,11 +64,11 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
                         }
                     case 'T':
                         if (j % 8 == 3) {
-                            gameView->health[((i+4)/MOVE_LENGTH + 1 % NUM_PLAYERS)] -= LIFE_LOSS_TRAP_ENCOUNTER; 
+                            gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS)] -= LIFE_LOSS_TRAP_ENCOUNTER; 
                         } break;
                     case 'D':
                         if (j % 8 == 5) {
-                            gameView->health[((i+4)/MOVE_LENGTH + 1 % 5)] -= LIFE_LOSS_DRACULA_ENCOUNTER;
+                            gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS)] -= LIFE_LOSS_DRACULA_ENCOUNTER;
                             gameView->health[PLAYER_DRACULA] -= LIFE_LOSS_HUNTER_ENCOUNTER;
                         } break;                      
                 }
