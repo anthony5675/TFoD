@@ -69,7 +69,7 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
                     case 'S':
                         if (pastPlays[i+j+1] == '?') {
                             gameView->health[PLAYER_DRACULA] -= LIFE_LOSS_SEA;
-                        }
+                        } break;
                     case 'T':
                         if (j % 8 == 3) {
                             gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS)] -= LIFE_LOSS_TRAP_ENCOUNTER; 
