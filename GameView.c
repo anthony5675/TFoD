@@ -1,3 +1,4 @@
+
 // GameView.c ... GameView ADT implementation
 
 #include <stdlib.h>
@@ -145,8 +146,63 @@ int getHealth(GameView currentView, PlayerID player)
 // Get the current location id of a given player
 LocationID getLocation(GameView currentView, PlayerID player)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+    
     return currentView->currLocation[player];
+}
+
+static void playerLocation (GameView gameView, char *pastPlays) {
+    char *ptr = pastPlays;
+
+    /*
+    EXAMPLE:
+    GMN.... SPL.... HAM....
+    G is ptr
+    M is ptr+1
+    N is ptr+2
+    this function grabs location and puts into location array
+     */
+
+    while (*ptr != '\0') {
+        if (*ptr == 'G') {
+            char *abbrev = malloc (3*sizeof(char));
+            abbrev[0] = *(ptr+1);
+            abbrev[1] = *(ptr+2);
+            abbrev[3] = '\0';
+            gameView->currLocation[PLAYER_LORD_GODALMING] = abbrevToID(abbrev);
+            free(abbrev);
+        } else if (*ptr == 'S') {
+            char *abbrev = malloc (3*sizeof(char));
+            abbrev[0] = *(ptr+1);
+            abbrev[1] = *(ptr+2);
+            abbrev[3] = '\0';
+            gameView->currLocation[PLAYER_DR_SEWARD] = abbrevToID(abbrev);
+            free(abbrev);
+        } else if (*ptr == 'H') {
+            char *abbrev = malloc (3*sizeof(char));
+            abbrev[0] = *(ptr+1);
+            abbrev[1] = *(ptr+2);
+            abbrev[3] = '\0';
+            gameView->currLocation[PLAYER_VAN_HELSING] = abbrevToID(abbrev);
+            free(abbrev);
+        } else if (*ptr == 'M') {
+            char *abbrev = malloc (3*sizeof(char));
+            abbrev[0] = *(ptr+1);
+            abbrev[1] = *(ptr+2);
+            abbrev[3] = '\0';
+            gameView->currLocation[PLAYER_MINA_HARKER] = abbrevToID(abbrev);
+            free(abbrev);
+        } else if (*ptr == 'D') {
+            //NEED TO FIX THIS FOR HIDING, DOUBLE BACK AND OTHER SHIT
+            char *abbrev = malloc (3*sizeof(char));
+            abbrev[0] = *(ptr+1);
+            abbrev[1] = *(ptr+2);
+            abbrev[3] = '\0';
+            gameView->currLocation[PLAYER_DRACULA] = abbrevToID(abbrev);
+            free(abbrev);
+        }
+        ptr += (MOVE_LENGTH + 1);
+
+    }
 }
 
 //// Functions that return information about the history of the game
