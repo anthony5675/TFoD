@@ -271,6 +271,7 @@ static void playerLocation (GameView gameView, char *pastPlays) {
                     gameView->currLocation[PLAYER_DRACULA] = DOUBLE_BACK_4;
                 } else if (abbrev[1] == '5') {
                     gameView->currLocation[PLAYER_DRACULA] = DOUBLE_BACK_5;
+                }
             } else if (strcmp (abbrev, checkTeleport) == 0) {
                 gameView->currLocation[PLAYER_DRACULA] == TELEPORT;
             } else if (strcmp (abbrev, checkHide) == 0) {
