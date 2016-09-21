@@ -68,8 +68,8 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
         if (i/(MOVE_LENGTH + 1) % NUM_PLAYERS < PLAYER_DRACULA) {
             j = 0;
             //If Hunter was teleported to St Joseph/Mary last round.
-            if (gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS)] == 0) {
-               gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS)] = GAME_START_HUNTER_LIFE_POINTS;
+            if (gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS] == 0) {
+               gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS] = GAME_START_HUNTER_LIFE_POINTS;
             }
             while ( j <= 6) {
                 switch (pastPlays[i+j]) {
@@ -81,21 +81,21 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
                     //Hunter runs into a trap.
                     case 'T':
                         if (j % 8 == 3) {
-                            gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS)] -= LIFE_LOSS_TRAP_ENCOUNTER; 
+                            gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS] -= LIFE_LOSS_TRAP_ENCOUNTER; 
                         } break;
                     //Hunter runs into Dracula.
                     case 'D':
                         if (j % 8 == 5) {
-                            gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS)] -= LIFE_LOSS_DRACULA_ENCOUNTER;
+                            gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS] -= LIFE_LOSS_DRACULA_ENCOUNTER;
                             gameView->health[PLAYER_DRACULA] -= LIFE_LOSS_HUNTER_ENCOUNTER;
                         } break;                      
                 }
                 //Hunter is resting at location.
                 if (j % 8 == 1) {
                     if (pastPlays[i+j] == pastPlays[i+j-40] && pastPlays[i+j+1] == pastPlays[i+j+1-40]) {
-                        gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS)] += LIFE_GAIN_REST;
-                        if (gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS)] > 9) {
-                           gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS)] = 9;
+                        gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS] += LIFE_GAIN_REST;
+                        if (gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS] > 9) {
+                           gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS] = 9;
                         }
                     }
                 }
@@ -281,7 +281,9 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
    int type;
    VList curLink= currentView->m->connections[from];
    while(curLink != NULL){
-      if((rail == TRUE && curLink->type == RAIL) || (road == TRUE && curLink->type == ROAD || (boat == TRUE && curLink->type = BOAT && player != PLAYER_DRACULA)){
+      if((rail == TRUE && curLink->type == RAIL) || 
+        (road == TRUE && curLink->type == ROAD) || 
+        (boat == TRUE && curLink->type = BOAT && player != PLAYER_DRACULA)){
          numlocs++;
       }
    LocationID 
