@@ -49,6 +49,8 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
     gameView->score = GAME_START_SCORE;
     gameView->score -= gameView->currRound; //-1 loss for each of D's turn
     
+    playerLocation(gameView, &pastPlays);
+
     //New Stuff
     gameView->currPlayer = turns % 5;
     
