@@ -167,28 +167,28 @@ static void playerLocation (GameView gameView, char *pastPlays) {
             char *abbrev = malloc (3*sizeof(char));
             abbrev[0] = *(ptr+1);
             abbrev[1] = *(ptr+2);
-            abbrev[3] = '\0';
+            abbrev[2] = '\0';
             gameView->currLocation[PLAYER_LORD_GODALMING] = abbrevToID(abbrev);
             free(abbrev);
         } else if (*ptr == 'S') {
             char *abbrev = malloc (3*sizeof(char));
             abbrev[0] = *(ptr+1);
             abbrev[1] = *(ptr+2);
-            abbrev[3] = '\0';
+            abbrev[2] = '\0';
             gameView->currLocation[PLAYER_DR_SEWARD] = abbrevToID(abbrev);
             free(abbrev);
         } else if (*ptr == 'H') {
             char *abbrev = malloc (3*sizeof(char));
             abbrev[0] = *(ptr+1);
             abbrev[1] = *(ptr+2);
-            abbrev[3] = '\0';
+            abbrev[2] = '\0';
             gameView->currLocation[PLAYER_VAN_HELSING] = abbrevToID(abbrev);
             free(abbrev);
         } else if (*ptr == 'M') {
             char *abbrev = malloc (3*sizeof(char));
             abbrev[0] = *(ptr+1);
             abbrev[1] = *(ptr+2);
-            abbrev[3] = '\0';
+            abbrev[2] = '\0';
             gameView->currLocation[PLAYER_MINA_HARKER] = abbrevToID(abbrev);
             free(abbrev);
         } else if (*ptr == 'D') {
@@ -196,7 +196,7 @@ static void playerLocation (GameView gameView, char *pastPlays) {
             char *abbrev = malloc (3*sizeof(char));
             abbrev[0] = *(ptr+1);
             abbrev[1] = *(ptr+2);
-            abbrev[3] = '\0';
+            abbrev[2] = '\0';
             gameView->currLocation[PLAYER_DRACULA] = abbrevToID(abbrev);
             free(abbrev);
         }
