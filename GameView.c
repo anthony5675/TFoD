@@ -36,7 +36,6 @@ struct gameView {
 };
      
 
-// Creates a new GameView to summarise the current state of the game
 GameView newGameView(char *pastPlays, PlayerMessage messages[])
 {
     GameView gameView = malloc(sizeof(struct gameView));
@@ -51,9 +50,10 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
     
     playerLocation(gameView, &pastPlays);
 
-    //New Stuff
-    gameView->currPlayer = turns % 5;
-    
+    gameView->currPlayer = (gameView->turns) % 5;
+
+    //Initialising health values.
+    int l = 0;    
     for (l = 0; l < NUM_PLAYERS; l++) {
         if (l == PLAYER_DRACULA) {
             gameView->health[l] = GAME_START_BLOOD_POINTS ;
@@ -62,7 +62,7 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
         };
     }
     
-    int i = 0;
+    int i, j, k = 0;
     while (pastPlays[i] != '\0') {
         //Hunters' Move
         if (i/(MOVE_LENGTH + 1) % NUM_PLAYERS < PLAYER_DRACULA) {
