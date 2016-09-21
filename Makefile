@@ -15,6 +15,8 @@ testDracView.o : testDracView.c Map.c Places.h
 
 Places.o : Places.c Places.h
 Map.o : Map.c Map.h Places.h
+set.o : set.c set.h
+queue.o : queue.c queue.h
 GameView.o : GameView.c GameView.h
 HunterView.o : HunterView.c HunterView.h
 DracView.o : DracView.c DracView.h

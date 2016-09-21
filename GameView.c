@@ -9,6 +9,8 @@
 #include "GameView.h"
 // #include "Map.h" ... if you decide to use the Map ADT
 #include "Map.h"
+#include "set.h"
+#include "queue.h"
 #define NUM_TRAPS 18
 #define NUM_IMVAMP 3
 #define MOVE_LENGTH 7
@@ -49,64 +51,40 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
     gameView->score = GAME_START_SCORE;
     gameView->score -= gameView->currRound; //-1 loss for each of D's turn
     
-    playerLocation(gameView, &pastPlays);
-
     //New Stuff
     gameView->currPlayer = turns % 5;
     
-    for (l = 0; l < NUM_PLAYERS; l++) {
-        if (l == PLAYER_DRACULA) {
-            gameView->health[l] = GAME_START_BLOOD_POINTS ;
-        } else {
-            gameView->health[l] = GAME_START_HUNTER_LIFE_POINTS;
-        };
-    }
-    
     int i = 0;
     while (pastPlays[i] != '\0') {
-        //Hunters' Move
-        if (i/(MOVE_LENGTH + 1) % NUM_PLAYERS < PLAYER_DRACULA) {
+        if (i % NUM_PLAYERS < PLAYER_DRACULA) {
             j = 0;
-            //If Hunter was teleported to St Joseph/Mary last round.
-            if (gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS)] == 0) {
-               gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS)] = GAME_START_HUNTER_LIFE_POINTS;
-            }
             while ( j <= 6) {
                 switch (pastPlays[i+j]) {
-                    //Sea Move by Dracula
                     case 'S':
                         if (pastPlays[i+j+1] == '?') {
                             gameView->health[PLAYER_DRACULA] -= LIFE_LOSS_SEA;
-                        } break;
-                    //Hunter runs into a trap.
+                        }
                     case 'T':
                         if (j % 8 == 3) {
                             gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS)] -= LIFE_LOSS_TRAP_ENCOUNTER; 
                         } break;
-                    //Hunter runs into Dracula.
                     case 'D':
                         if (j % 8 == 5) {
                             gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS)] -= LIFE_LOSS_DRACULA_ENCOUNTER;
                             gameView->health[PLAYER_DRACULA] -= LIFE_LOSS_HUNTER_ENCOUNTER;
                         } break;                      
                 }
-                //Hunter is resting at location.
                 if (j % 8 == 1) {
                     if (pastPlays[i+j] == pastPlays[i+j-40] && pastPlays[i+j+1] == pastPlays[i+j+1-40]) {
                         gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS)] += LIFE_GAIN_REST;
-                        if (gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS)] > 9) {
-                           gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS)] = 9;
-                        }
                     }
                 }
                 j++;
             }
-        //Dracula's Move
         } else {
             j = 0;
             while ( j <= 6) {
                 switch (pastPlays[i+j]) {
-                    //Sea Moves by Dracula.
                     case 'A':
                         if (pastPlays[i+j+1] == 'S' || pastPlays[i+j+1] == 'O') {
                             gameView->health[PLAYER_DRACULA] -= LIFE_LOSS_SEA;
@@ -130,11 +108,9 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
                     case 'T':
                         if (pastPlays[i+j+1] == 'S') {
                             gameView->health[PLAYER_DRACULA] -= LIFE_LOSS_SEA;
-                        //Dracula teleports to Castle Dracula.
                         } else if (pastPlays[i+j+1] == 'P') {
                             gameView->health[PLAYER_DRACULA] += LIFE_GAIN_CASTLE_DRACULA;
-                        } break;
-                    //Vampire matures.
+                        } break;                                            
                     case 'V':
                         if (j % 8 == 6) {
                             gameView->score -= SCORE_LOSS_VAMPIRE_MATURES;
@@ -142,13 +118,13 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
                 }
                 j++;
             }   
-        }
-        //Check if anyone has run out of health.
+        }   
         for (k = 0; k < NUM_PLAYERS; k++) {
             if (gameView->health[k] <= 0 && k == PLAYER_DRACULA) {
                 //GAME OVER?
             } else if (gameView->health[k] <= 0) {
                 gameView->score -= SCORE_LOSS_HUNTER_HOSPITAL;
+                gameView->health[k] = GAME_START_HUNTER_LIFE_POINTS;
             }
         }
         i += 8;
@@ -276,15 +252,19 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
                                int road, int rail, int sea)
 {
    assert(0 <= player < 5);
+   Set s = newSet();
+   Queue q = newQueue();
    assert(0 <= LocationID < currentView->m->nV);
-   int numlocs = 0;
    int type;
    VList curLink= currentView->m->connections[from];
    while(curLink != NULL){
-      if((rail == TRUE && curLink->type == RAIL) || (road == TRUE && curLink->type == ROAD || (boat == TRUE && curLink->type = BOAT && player != PLAYER_DRACULA)){
-         numlocs++;
+      if((road == TRUE && curLink->type == ROAD) || (boat == TRUE && curLink->type = BOAT)){
+        InsertInto(s,idToName(curLink->v));
       }
-   LocationID 
+if(rail == TRUE && player != PLAYER_DRACULA){
+    enterQueue(q,)
+q = newQueue();
+} 
    VList curLink= currentView->m->connections[from];
    /*
    while(curLink != NULL){
