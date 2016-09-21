@@ -52,6 +52,14 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
     //New Stuff
     gameView->currPlayer = turns % 5;
     
+    for (l = 0; l < NUM_PLAYERS; l++) {
+        if (l == PLAYER_DRACULA) {
+            gameView->health[l] = GAME_START_BLOOD_POINTS ;
+        } else {
+            gameView->health[l] = GAME_START_HUNTER_LIFE_POINTS;
+        };
+    }
+    
     int i = 0;
     while (pastPlays[i] != '\0') {
         if (i % NUM_PLAYERS < PLAYER_DRACULA) {
