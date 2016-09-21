@@ -250,11 +250,37 @@ static void playerLocation (GameView gameView, char *pastPlays) {
             abbrev[0] = *(ptr+1);
             abbrev[1] = *(ptr+2);
             abbrev[2] = '\0';
-            gameView->currLocation[PLAYER_DRACULA] = abbrevToID(abbrev);
+
+            char *checkCity = "C?";
+            char *checkSea = "S?";
+            char *checkTeleport = "TP";
+            char *checkHide = "HI";
+
+            if (strcmp (abbrev, checkCity) == 0) { //string comparison, 0 is equal
+                gameView->currLocation[PLAYER_DRACULA] = CITY_UNKNOWN;
+            } else if (strcmp (abbrev, checkSea) == 0) {
+                gameView->currLocation[PLAYER_DRACULA] = SEA_UNKNOWN;
+            } else if (abbrev[0] == 'D') { //double back
+                if (abbrev[1] == '1') {
+                    gameView->currLocation[PLAYER_DRACULA] = DOUBLE_BACK_1;
+                } else if (abbrev[1] == '2') {
+                    gameView->currLocation[PLAYER_DRACULA] = DOUBLE_BACK_2;
+                } else if (abbrev[1] == '3') {
+                    gameView->currLocation[PLAYER_DRACULA] = DOUBLE_BACK_3;
+                } else if (abbrev[1] == '4') {
+                    gameView->currLocation[PLAYER_DRACULA] = DOUBLE_BACK_4;
+                } else if (abbrev[1] == '5') {
+                    gameView->currLocation[PLAYER_DRACULA] = DOUBLE_BACK_5;
+            } else if (strcmp (abbrev, checkTeleport) == 0) {
+                gameView->currLocation[PLAYER_DRACULA] == TELEPORT;
+            } else if (strcmp (abbrev, checkHide) == 0) {
+                gameView->currLocation[PLAYER_DRACULA] =HIDE;
+            } else {
+                gameView->currLocation[PLAYER_DRACULA] = abbrevToID(abbrev);
+            }
             free(abbrev);
         }
         ptr += (MOVE_LENGTH + 1);
-
     }
 }
 
