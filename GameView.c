@@ -43,6 +43,35 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
 
     gameView->score = GAME_START_SCORE;
     gameView->score -= gameView->currRound; //-1 loss for each of D's turn
+    
+    //New Stuff
+    gameView->currPlayer = turns % 5;
+    
+    int i = 0;
+    while (pastPlays[i] != '\0') {
+        switch (pastPlays[i]) {
+            case 'T':
+                if (((i+4)/MOVE_LENGTH + 1 % 5) == PLAYER_DRACULA) {
+                    //trap is placed.
+                } else {
+                    //trap is removed.
+                    health[((i+4)/MOVE_LENGTH + 1 % 5)] -= 2;
+                }
+                break;
+            case 'V':
+                if (((i+4)/MOVE_LENGTH + 1 % 5) == PLAYER_DRACULA) {
+                    //vampire placed
+                } else {
+                    //vampire is removed.
+                }  
+                break;              
+            case 'D':
+                health[((i+4)/MOVE_LENGTH + 1 % 5)] -= 4;
+                health[PLAYER_DRACULA] -= 10;
+                break;
+            case 'M':
+        }
+    }
                                  
     return gameView;
 }
