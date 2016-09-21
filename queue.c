@@ -11,6 +11,7 @@ typedef struct Node *Link;
 
 typedef struct Node {
 	int val;
+	int depth;
 	Link  next;
 } Node;
 	

@@ -367,43 +367,57 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
                                LocationID from, PlayerID player, Round round,
                                int road, int rail, int sea)
 {
-   assert(0 <= player < 5);
-   Set s = newSet();
-   Queue q = newQueue();
-   assert(0 <= LocationID < currentView->m->nV);
-   int type;
-   VList curLink= currentView->m->connections[from];
-   while(curLink != NULL){
-<<<<<<< HEAD
-      if((road == TRUE && curLink->type == ROAD) || (boat == TRUE && curLink->type = BOAT)){
-        InsertInto(s,idToName(curLink->v));
-=======
-      if((rail == TRUE && curLink->type == RAIL) || 
-        (road == TRUE && curLink->type == ROAD) || 
-        (boat == TRUE && curLink->type = BOAT && player != PLAYER_DRACULA)){
-         numlocs++;
->>>>>>> ee6d1902897b5fe0d2acca0c402d9dfa73f5d987
-      }
-if(rail == TRUE && player != PLAYER_DRACULA){
-    enterQueue(q,)
-q = newQueue();
-} 
-   VList curLink= currentView->m->connections[from];
-   /*
-   while(curLink != NULL){
-      if((rail == TRUE && curLink->type == RAIL) || (road == TRUE && curLink->type == ROAD || (boat == TRUE && curLink->type = BOAT &&player !=    PLAYER_DRACULA)){
-         numlocs++;
-      }
-      else if(road == TRUE && curLink->type == ROAD){
-         numlocs++;
-      }
-      else if(boat == TRUE && curLink->type = BOAT &&player != PLAYER_DRACULA){
-         numlocs++;
-      }
-      curLink = curLink->next;
-   }
-   *numLocations = numlocs;
-*/
+    assert(0 <= player < 5);
+    assert(0 <= LocationID < currentView->m->nV);
 
-    return NULL;
+    Set mainset = newSet();
+    Set railset = newSet();
+    InsertInto(mainset,from);
+    Queue q = newQueue();
+    int qval;
+    int qdepth;
+    VList curLink= currentView->m->connections[from];
+
+
+
+    if(rail == TRUE && player != PLAYER_DRACULA){//adds rails
+        enterQueue(q,from);
+        q->front->depth = 0;
+        while(!emptyQueue(q)){
+            qdepth = q->front->depth;
+            qval = leaveQueue(q);
+            if (qdepth < (curRound+player)%4){
+                curLink= currentView->m->connections[qval];
+                while(curLink != NULL){
+                    if(curLink->type == RAIL){
+                        if(!isElem(railset,curLink->v)){
+                            InsertInto(mainset,curLink->v);
+                            enterQueue(q,curLink->v);
+                            q->back->depth++;
+                        }
+                    }
+                    curLink = curLink->next;
+                }
+            }
+        }
+    }
+    while(curLink != NULL){//inserts boat and road connections into mainset
+        if((road == TRUE && curLink->type == ROAD) || (boat == TRUE && curLink->type = BOAT)){
+            InsertInto(mainset,curLink->v);
+        }
+        curLink = curLink->next;
+    }
+
+    *numLocations = nElems(mainset);
+    LocationID *locations = malloc(sizeof(LocationID)*(nElems(mainset)));
+    Link l = mainset->elems;
+    int i = 0;
+        while(l != NULL){//fills array with mainset
+            locations[i] = l->val;
+            l = l->next;
+        }
+    }
+    disposeSet(mainset);
+    disposeQueue(mainqueue);
+    return locations;
 }
