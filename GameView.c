@@ -1,3 +1,4 @@
+
 // GameView.c ... GameView ADT implementation
 
 #include <stdlib.h>
@@ -11,6 +12,10 @@
 #define NUM_TRAPS 18
 #define NUM_IMVAMP 3
 #define MOVE_LENGTH 7
+
+//Helper Functions
+static void playerLocation (GameView gameView, char *pastPlays);
+
 /*struct trap{
    int turnPlaced;
    int location;
@@ -49,28 +54,78 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
     
     int i = 0;
     while (pastPlays[i] != '\0') {
-        switch (pastPlays[i]) {
-            case 'T':
-                if (((i+4)/MOVE_LENGTH + 1 % 5) == PLAYER_DRACULA) {
-                    //trap is placed.
-                } else {
-                    //trap is removed.
-                    health[((i+4)/MOVE_LENGTH + 1 % 5)] -= 2;
+        if (i % NUM_PLAYERS < PLAYER_DRACULA) {
+            j = 0;
+            while ( j <= 6) {
+                switch (pastPlays[i+j]) {
+                    case 'S':
+                        if (pastPlays[i+j+1] == '?') {
+                            gameView->health[PLAYER_DRACULA] -= LIFE_LOSS_SEA;
+                        }
+                    case 'T':
+                        if (j % 8 == 3) {
+                            gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS)] -= LIFE_LOSS_TRAP_ENCOUNTER; 
+                        } break;
+                    case 'D':
+                        if (j % 8 == 5) {
+                            gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS)] -= LIFE_LOSS_DRACULA_ENCOUNTER;
+                            gameView->health[PLAYER_DRACULA] -= LIFE_LOSS_HUNTER_ENCOUNTER;
+                        } break;                      
                 }
-                break;
-            case 'V':
-                if (((i+4)/MOVE_LENGTH + 1 % 5) == PLAYER_DRACULA) {
-                    //vampire placed
-                } else {
-                    //vampire is removed.
-                }  
-                break;              
-            case 'D':
-                health[((i+4)/MOVE_LENGTH + 1 % 5)] -= 4;
-                health[PLAYER_DRACULA] -= 10;
-                break;
-            case 'M':
+                if (j % 8 == 1) {
+                    if (pastPlays[i+j] == pastPlays[i+j-40] && pastPlays[i+j+1] == pastPlays[i+j+1-40]) {
+                        gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS)] += LIFE_GAIN_REST;
+                    }
+                }
+                j++;
+            }
+        } else {
+            j = 0;
+            while ( j <= 6) {
+                switch (pastPlays[i+j]) {
+                    case 'A':
+                        if (pastPlays[i+j+1] == 'S' || pastPlays[i+j+1] == 'O') {
+                            gameView->health[PLAYER_DRACULA] -= LIFE_LOSS_SEA;
+                        } break;
+                    case 'B':
+                        if (pastPlays[i+j+1] == 'B' || pastPlays[i+j+1] == 'S') {
+                            gameView->health[PLAYER_DRACULA] -= LIFE_LOSS_SEA;
+                        } break;
+                    case 'E':
+                        if (pastPlays[i+j+1] == 'C') {
+                            gameView->health[PLAYER_DRACULA] -= LIFE_LOSS_SEA;
+                        } break;
+                    case 'I':
+                        if (pastPlays[i+j+1] == 'O' || pastPlays[i+j+1] == 'R') {
+                            gameView->health[PLAYER_DRACULA] -= LIFE_LOSS_SEA;
+                        } break;                   
+                    case 'M': case 'N':
+                        if (pastPlays[i+j+1] == 'S') {
+                            gameView->health[PLAYER_DRACULA] -= LIFE_LOSS_SEA;
+                        } break;
+                    case 'T':
+                        if (pastPlays[i+j+1] == 'S') {
+                            gameView->health[PLAYER_DRACULA] -= LIFE_LOSS_SEA;
+                        } else if (pastPlays[i+j+1] == 'P') {
+                            gameView->health[PLAYER_DRACULA] += LIFE_GAIN_CASTLE_DRACULA;
+                        } break;                                            
+                    case 'V':
+                        if (j % 8 == 6) {
+                            gameView->score -= SCORE_LOSS_VAMPIRE_MATURES;
+                        } break;                             
+                }
+                j++;
+            }   
+        }   
+        for (k = 0; k < NUM_PLAYERS; k++) {
+            if (gameView->health[k] <= 0 && k == PLAYER_DRACULA) {
+                //GAME OVER?
+            } else if (gameView->health[k] <= 0) {
+                gameView->score -= SCORE_LOSS_HUNTER_HOSPITAL;
+                gameView->health[k] = GAME_START_HUNTER_LIFE_POINTS;
+            }
         }
+        i += 8;
     }
                                  
     return gameView;
@@ -118,8 +173,63 @@ int getHealth(GameView currentView, PlayerID player)
 // Get the current location id of a given player
 LocationID getLocation(GameView currentView, PlayerID player)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+    
     return currentView->currLocation[player];
+}
+
+static void playerLocation (GameView gameView, char *pastPlays) {
+    char *ptr = pastPlays;
+
+    /*
+    EXAMPLE:
+    GMN.... SPL.... HAM....
+    G is ptr
+    M is ptr+1
+    N is ptr+2
+    this function grabs location and puts into location array
+     */
+
+    while (*ptr != '\0') {
+        if (*ptr == 'G') {
+            char *abbrev = malloc (3*sizeof(char));
+            abbrev[0] = *(ptr+1);
+            abbrev[1] = *(ptr+2);
+            abbrev[2] = '\0';
+            gameView->currLocation[PLAYER_LORD_GODALMING] = abbrevToID(abbrev);
+            free(abbrev);
+        } else if (*ptr == 'S') {
+            char *abbrev = malloc (3*sizeof(char));
+            abbrev[0] = *(ptr+1);
+            abbrev[1] = *(ptr+2);
+            abbrev[2] = '\0';
+            gameView->currLocation[PLAYER_DR_SEWARD] = abbrevToID(abbrev);
+            free(abbrev);
+        } else if (*ptr == 'H') {
+            char *abbrev = malloc (3*sizeof(char));
+            abbrev[0] = *(ptr+1);
+            abbrev[1] = *(ptr+2);
+            abbrev[2] = '\0';
+            gameView->currLocation[PLAYER_VAN_HELSING] = abbrevToID(abbrev);
+            free(abbrev);
+        } else if (*ptr == 'M') {
+            char *abbrev = malloc (3*sizeof(char));
+            abbrev[0] = *(ptr+1);
+            abbrev[1] = *(ptr+2);
+            abbrev[2] = '\0';
+            gameView->currLocation[PLAYER_MINA_HARKER] = abbrevToID(abbrev);
+            free(abbrev);
+        } else if (*ptr == 'D') {
+            //NEED TO FIX THIS FOR HIDING, DOUBLE BACK AND OTHER SHIT
+            char *abbrev = malloc (3*sizeof(char));
+            abbrev[0] = *(ptr+1);
+            abbrev[1] = *(ptr+2);
+            abbrev[2] = '\0';
+            gameView->currLocation[PLAYER_DRACULA] = abbrevToID(abbrev);
+            free(abbrev);
+        }
+        ptr += (MOVE_LENGTH + 1);
+
+    }
 }
 
 //// Functions that return information about the history of the game
