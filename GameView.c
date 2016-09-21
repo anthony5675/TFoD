@@ -17,6 +17,7 @@
 
 //Helper Functions
 static void playerLocation (GameView gameView, char *pastPlays);
+static void fillTrails (GameView gameView, char *pastPlays);
 
 /*struct trap{
    int turnPlaced;
@@ -30,7 +31,7 @@ struct gameView {
     int turns;
     //trap trapArray[NUM_TRAPS];
     //trap imVampArray[NUM_IMVAMP];
-    PlayerID trail[NUM_PLAYERS][TRAIL_SIZE];
+    PlayerID trails[NUM_PLAYERS][TRAIL_SIZE];
     int health[NUM_PLAYERS];
     LocationID currLocation[NUM_PLAYERS];
     LocationID location[NUM_PLAYERS][TRAIL_SIZE];
@@ -50,13 +51,12 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
     gameView->score = GAME_START_SCORE;
     gameView->score -= gameView->currRound; //-1 loss for each of D's turn
     
-<<<<<<< HEAD
     //New Stuff
     gameView->currPlayer = turns % 5;
     
     int i = 0;
-=======
     playerLocation(gameView, &pastPlays);
+    fillTrails(gameView, &pastPlays);
 
     gameView->currPlayer = (gameView->turns) % 5;
 
@@ -71,17 +71,13 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
     }
     
     int i, j, k = 0;
->>>>>>> ee6d1902897b5fe0d2acca0c402d9dfa73f5d987
     while (pastPlays[i] != '\0') {
         if (i % NUM_PLAYERS < PLAYER_DRACULA) {
             j = 0;
-<<<<<<< HEAD
-=======
             //If Hunter was teleported to St Joseph/Mary last round.
             if (gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS] == 0) {
                gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS] = GAME_START_HUNTER_LIFE_POINTS;
             }
->>>>>>> ee6d1902897b5fe0d2acca0c402d9dfa73f5d987
             while ( j <= 6) {
                 switch (pastPlays[i+j]) {
                     case 'S':
@@ -100,14 +96,10 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
                 }
                 if (j % 8 == 1) {
                     if (pastPlays[i+j] == pastPlays[i+j-40] && pastPlays[i+j+1] == pastPlays[i+j+1-40]) {
-<<<<<<< HEAD
-                        gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS)] += LIFE_GAIN_REST;
-=======
                         gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS] += LIFE_GAIN_REST;
                         if (gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS] > 9) {
                            gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS] = 9;
                         }
->>>>>>> ee6d1902897b5fe0d2acca0c402d9dfa73f5d987
                     }
                 }
                 j++;
@@ -160,65 +152,6 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
         }
         i += 8;
     }
-    
-    //Filling the trail arrays.
-    int m, n = 0;
-    int o = (gameView->turns % NUM_PLAYERS) - 1;
-    int index = sizeof(pastPlays) - 6;
-    char *abbrev = malloc (3*sizeof(char));
-    abbrev[2] = '\0';
-    
-    char *checkCity = "C?";
-    char *checkSea = "S?";
-    char *checkTeleport = "TP";
-    char *checkHide = "HI";
-     
-    while (m < TRAIL_SIZE) {
-        n = 0;
-        while (n < NUM_PLAYERS) {
-            if (index != 0) {
-                abbrev[0] = pastPlays[index];
-                abbrev[1] = pastPlays[index + 1];
-                
-                if (strcmp (abbrev, checkCity) == 0) { //string comparison, 0 is equal
-                    gameView->trail[o][m] = CITY_UNKNOWN;
-                } else if (strcmp (abbrev, checkSea) == 0) {
-                    gameView->trail[o][m] = SEA_UNKNOWN;
-                } else if (abbrev[0] == 'D') { //double back
-                    if (abbrev[1] == '1') {
-                        gameView->trail[o][m] = DOUBLE_BACK_1;
-                    } else if (abbrev[1] == '2') {
-                        gameView->trail[o][m] = DOUBLE_BACK_2;
-                    } else if (abbrev[1] == '3') {
-                        gameView->trail[o][m] = DOUBLE_BACK_3;
-                    } else if (abbrev[1] == '4') {
-                        gameView->trail[o][m] = DOUBLE_BACK_4;
-                    } else if (abbrev[1] == '5') {
-                        gameView->trail[o][m] = DOUBLE_BACK_5;
-                    }
-                } else if (strcmp (abbrev, checkTeleport) == 0) {
-                    gameView->trail[o][m] == TELEPORT;
-                } else if (strcmp (abbrev, checkHide) == 0) {
-                    gameView->trail[o][m] =HIDE;
-                } else {
-                    gameView->trail[o][m] = abbrevToID(abbrev);
-                }
-            } else {
-                gameView->trail[o][m] = UNKNOWN_LOCATION;
-            }
-            n++; o--;
-            if (o < 0) {
-                o = PLAYER_DRACULA;                        
-            }
-            index -= 8;
-            if (index < 1) {
-                index = 0;
-            } 
-        }
-        m++;
-    }
-    
-    free(abbrev);
                                  
     return gameView;
 }
@@ -350,13 +283,81 @@ static void playerLocation (GameView gameView, char *pastPlays) {
     }
 }
 
+static void fillTrails (GameView gameView, char *pastPlays){
+    //Filling the trail arrays.
+    int m, n = 0;
+    int o = (gameView->turns % NUM_PLAYERS) - 1;
+    int index = sizeof(pastPlays) - 6;
+    char *abbrev = malloc (3*sizeof(char));
+    abbrev[2] = '\0';
+    
+    char *checkCity = "C?";
+    char *checkSea = "S?";
+    char *checkTeleport = "TP";
+    char *checkHide = "HI";
+     
+    while (m < TRAIL_SIZE) {
+        n = 0;
+        while (n < NUM_PLAYERS) {
+            if (index != 0) {
+                abbrev[0] = pastPlays[index];
+                abbrev[1] = pastPlays[index + 1];
+                gameView->trails[o][m] = abbrevToID(abbrev); 
+                
+                if (o == 4) { //Dracula's turn
+                    if (strcmp (abbrev, checkCity) == 0) { //string comparison, 0 is equal
+                        gameView->trails[o][m] = CITY_UNKNOWN;
+                    } else if (strcmp (abbrev, checkSea) == 0) {
+                        gameView->trails[o][m] = SEA_UNKNOWN;
+                    } else if (abbrev[0] == 'D') { //double back
+                        if (abbrev[1] == '1') {
+                            gameView->trails[o][m] = DOUBLE_BACK_1;
+                        } else if (abbrev[1] == '2') {
+                            gameView->trails[o][m] = DOUBLE_BACK_2;
+                        } else if (abbrev[1] == '3') {
+                            gameView->trails[o][m] = DOUBLE_BACK_3;
+                        } else if (abbrev[1] == '4') {
+                            gameView->trails[o][m] = DOUBLE_BACK_4;
+                        } else if (abbrev[1] == '5') {
+                            gameView->trails[o][m] = DOUBLE_BACK_5;
+                        }
+                    } else if (strcmp (abbrev, checkTeleport) == 0) {
+                        gameView->trails[o][m] == TELEPORT;
+                    } else if (strcmp (abbrev, checkHide) == 0) {
+                        gameView->trails[o][m] =HIDE;
+                    } else {
+                        gameView->trails[o][m] = abbrevToID(abbrev);
+                    }
+                }
+            } else {
+                gameView->trails[o][m] = UNKNOWN_LOCATION;
+            }
+            n++; o--;
+            if (o < 0) {
+                o = PLAYER_DRACULA;                        
+            }
+            index -= 8;
+            if (index < 1) {
+                index = 0;
+            } 
+        }
+        m++;
+    }
+    
+    free(abbrev);
+}
+
 //// Functions that return information about the history of the game
 
 // Fills the trail array with the location ids of the last 6 turns
 void getHistory(GameView currentView, PlayerID player,
                             LocationID trail[TRAIL_SIZE])
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+    int i = 0;
+    while (i < TRAIL_SIZE) {
+        trail[i] = currentView->trails[player][i];
+        i++;
+    }
 }
 
 //// Functions that query the map to find information about connectivity
