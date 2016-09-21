@@ -304,7 +304,7 @@ static void fillTrails (GameView gameView, char *pastPlays){
                 abbrev[1] = pastPlays[index + 1];
                 gameView->trails[o][m] = abbrevToID(abbrev); 
                 
-                if (o == 4) { //Dracula's turn
+                if (o == PLAYER_DRACULA) { //Dracula's turn
                     if (strcmp (abbrev, checkCity) == 0) { //string comparison, 0 is equal
                         gameView->trails[o][m] = CITY_UNKNOWN;
                     } else if (strcmp (abbrev, checkSea) == 0) {
