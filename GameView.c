@@ -161,9 +161,6 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
     char *abbrev = malloc (3*sizeof(char));
     abbrev[2] = '\0';
      
-    if (index < 0) {
-        index = 0;
-    }
     while (m < TRAIL_SIZE) {
         n = 0;
         while (n < NUM_PLAYERS) {
