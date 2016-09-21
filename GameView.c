@@ -160,6 +160,11 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
     int index = sizeof(pastPlays) - 6;
     char *abbrev = malloc (3*sizeof(char));
     abbrev[2] = '\0';
+    
+    char *checkCity = "C?";
+    char *checkSea = "S?";
+    char *checkTeleport = "TP";
+    char *checkHide = "HI";
      
     while (m < TRAIL_SIZE) {
         n = 0;
@@ -167,7 +172,30 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
             if (index != 0) {
                 abbrev[0] = pastPlays[index];
                 abbrev[1] = pastPlays[index + 1];
-                gameView->trail[o][m] = abbrevToID(abbrev);
+                
+                if (strcmp (abbrev, checkCity) == 0) { //string comparison, 0 is equal
+                    gameView->trail[o][m] = CITY_UNKNOWN;
+                } else if (strcmp (abbrev, checkSea) == 0) {
+                    gameView->trail[o][m] = SEA_UNKNOWN;
+                } else if (abbrev[0] == 'D') { //double back
+                    if (abbrev[1] == '1') {
+                        gameView->trail[o][m] = DOUBLE_BACK_1;
+                    } else if (abbrev[1] == '2') {
+                        gameView->trail[o][m] = DOUBLE_BACK_2;
+                    } else if (abbrev[1] == '3') {
+                        gameView->trail[o][m] = DOUBLE_BACK_3;
+                    } else if (abbrev[1] == '4') {
+                        gameView->trail[o][m] = DOUBLE_BACK_4;
+                    } else if (abbrev[1] == '5') {
+                        gameView->trail[o][m] = DOUBLE_BACK_5;
+                    }
+                } else if (strcmp (abbrev, checkTeleport) == 0) {
+                    gameView->trail[o][m] == TELEPORT;
+                } else if (strcmp (abbrev, checkHide) == 0) {
+                    gameView->trail[o][m] =HIDE;
+                } else {
+                    gameView->trail[o][m] = abbrevToID(abbrev);
+                }
             } else {
                 gameView->trail[o][m] = UNKNOWN_LOCATION;
             }
