@@ -87,15 +87,7 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
                         if (pastPlays[i+j+1] == 'O' || pastPlays[i+j+1] == 'R') {
                             health[PLAYER_DRACULA] -= LIFE_LOSS_SEA;
                         } break;                   
-                    case 'M':
-                        if (pastPlays[i+j+1] == 'S') {
-                            health[PLAYER_DRACULA] -= LIFE_LOSS_SEA;
-                        } break; 
-                    case 'N':
-                        if (pastPlays[i+j+1] == 'S') {
-                            health[PLAYER_DRACULA] -= LIFE_LOSS_SEA;
-                        } break; 
-                    case 'T':
+                    case 'M': case 'N': case 'T':
                         if (pastPlays[i+j+1] == 'S') {
                             health[PLAYER_DRACULA] -= LIFE_LOSS_SEA;
                         } break;
