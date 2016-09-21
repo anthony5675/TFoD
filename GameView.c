@@ -49,29 +49,64 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
     
     int i = 0;
     while (pastPlays[i] != '\0') {
-        switch (pastPlays[i]) {
-            case 'T':
-                if (((i+4)/MOVE_LENGTH + 1 % 5) == PLAYER_DRACULA) {
-                    //trap is placed.
-                } else {
-                    //trap is removed.
-                    health[((i+4)/MOVE_LENGTH + 1 % 5)] -= 2;
+        if (i % NUM_PLAYERS < PLAYER_DRACULA) {
+            j = 0;
+            while ( j <= 6) {
+                switch (pastPlays[i+j]) {
+                    case 'S':
+                        if (pastPlays[i+j+1] == '?') {
+                            health[PLAYER_DRACULA] -= LIFE_LOSS_SEA;
+                        }
+                    case 'T':
+                        gameView->health[((i+4)/MOVE_LENGTH + 1 % NUM_PLAYERS)] -= LIFE_LOSS_TRAP_ENCOUNTER; 
+                        break;
+                    case 'D':
+                        health[((i+4)/MOVE_LENGTH + 1 % 5)] -= LIFE_LOSS_DRACULA_ENCOUNTER;
+                        health[PLAYER_DRACULA] -= LIFE_LOSS_HUNTER_ENCOUNTER;
+                        break;                         
                 }
-                break;
-            case 'V':
-                if (((i+4)/MOVE_LENGTH + 1 % 5) == PLAYER_DRACULA) {
-                    //vampire placed
-                } else {
-                    //vampire is removed.
-                }  
-                break;              
-            case 'D':
-                health[((i+4)/MOVE_LENGTH + 1 % 5)] -= 4;
-                health[PLAYER_DRACULA] -= 10;
-                break;
-            case 'M':
+                j++;
+            }
+        } else {
+            j = 0;
+            while ( j <= 6) {
+                switch (pastPlays[i+j]) {
+                    case 'A':
+                        if (pastPlays[i+j+1] == 'S' || pastPlays[i+j+1] == 'O') {
+                            health[PLAYER_DRACULA] -= LIFE_LOSS_SEA;
+                        } break;
+                    case 'B':
+                        if (pastPlays[i+j+1] == 'B' || pastPlays[i+j+1] == 'S') {
+                            health[PLAYER_DRACULA] -= LIFE_LOSS_SEA;
+                        } break;
+                    case 'E':
+                        if (pastPlays[i+j+1] == 'C') {
+                            health[PLAYER_DRACULA] -= LIFE_LOSS_SEA;
+                        } break;
+                    case 'I':
+                        if (pastPlays[i+j+1] == 'O' || pastPlays[i+j+1] == 'R') {
+                            health[PLAYER_DRACULA] -= LIFE_LOSS_SEA;
+                        } break;                   
+                    case 'M':
+                        if (pastPlays[i+j+1] == 'S') {
+                            health[PLAYER_DRACULA] -= LIFE_LOSS_SEA;
+                        } break; 
+                    case 'N':
+                        if (pastPlays[i+j+1] == 'S') {
+                            health[PLAYER_DRACULA] -= LIFE_LOSS_SEA;
+                        } break; 
+                    case 'T':
+                        if (pastPlays[i+j+1] == 'S') {
+                            health[PLAYER_DRACULA] -= LIFE_LOSS_SEA;
+                        } break;
+                    case 'V':
+                        if (i % 8 == 6) {
+                            gameView->score -= SCORE_LOSS_VAMPIRE_MATURES;
+                        } break;                             
+                }
+                j++;
+            }
         }
-    }
                                  
     return gameView;
 }
