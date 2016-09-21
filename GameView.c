@@ -245,7 +245,6 @@ static void playerLocation (GameView gameView, char *pastPlays) {
             gameView->currLocation[PLAYER_MINA_HARKER] = abbrevToID(abbrev);
             free(abbrev);
         } else if (*ptr == 'D') {
-            //NEED TO FIX THIS FOR HIDING, DOUBLE BACK AND OTHER SHIT
             char *abbrev = malloc (3*sizeof(char));
             abbrev[0] = *(ptr+1);
             abbrev[1] = *(ptr+2);
