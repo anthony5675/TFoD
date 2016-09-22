@@ -52,7 +52,6 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
     
     fillTrails(gameView, pastPlays);
     playerLocation(gameView);
-    calcTraps(pastPlays,gameView);
 
     gameView->currPlayer = (gameView->turns) % 5;
 
