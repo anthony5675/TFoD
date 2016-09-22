@@ -47,6 +47,7 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
     //See "The Data" page on webcms for more info.
     gameView->turns = (strlen(pastPlays)+1)/(MOVE_LENGTH);
     gameView->currRound = gameView->turns/NUM_PLAYERS;
+    gameView->score = GAME_START_SCORE;
 
     fillTrails(gameView, pastPlays);
     playerLocation(gameView);
