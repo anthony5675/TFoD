@@ -345,7 +345,7 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
         while(!emptyQueue(q)){
             qdepth = getDepth(q);
             qval = leaveQueue(q);
-            if (qdepth < (currentView->round+player)%4){
+            if (qdepth < (round+player)%4){
                 neibsize = typeNeighbours(currentView->m, qval, RAIL, locarray);
                 int i;
                 for (i = 0; i < neibsize; i++){
@@ -359,6 +359,7 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
         }
     }
         //printf("%d\n",nElems(mainset));
+    showQueue(q);
     neibsize = typeNeighbours(currentView->m, from, BOAT, locarray);
     int i;
     for (i = 0; i < neibsize; i++){
