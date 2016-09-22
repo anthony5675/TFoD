@@ -13,10 +13,10 @@
 #include "queue.h"
 #define NUM_TRAPS 18
 #define NUM_IMVAMP 3
-#define MOVE_LENGTH 7
+#define MOVE_LENGTH 8
 
 //Helper Functions
-static void playerLocation (GameView gameView, char *pastPlays);
+static void playerLocation (GameView gameView);
 static void fillTrails (GameView gameView, char *pastPlays);
 
 /*struct trap{
@@ -34,7 +34,6 @@ struct gameView {
     PlayerID trails[NUM_PLAYERS][TRAIL_SIZE];
     int health[NUM_PLAYERS];
     LocationID currLocation[NUM_PLAYERS];
-    LocationID location[NUM_PLAYERS][TRAIL_SIZE];
     Map m;
 };
      
@@ -45,18 +44,15 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
     
     gameView->m = newMap();
     //See "The Data" page on webcms for more info.
-    gameView->turns = (strlen(pastPlays)+1)/(MOVE_LENGTH + 1);
+    gameView->turns = (strlen(pastPlays)+1)/(MOVE_LENGTH);
     gameView->currRound = gameView->turns/NUM_PLAYERS;
 
     gameView->score = GAME_START_SCORE;
     gameView->score -= gameView->currRound; //-1 loss for each of D's turn
     
-    //New Stuff
-    //gameView->currPlayer = turns % 5;
     
-    int i = 0;
-    playerLocation(gameView, &pastPlays);
-    fillTrails(gameView, &pastPlays);
+    fillTrails(gameView, pastPlays);
+    playerLocation(gameView);
 
     gameView->currPlayer = (gameView->turns) % 5;
 
@@ -75,8 +71,8 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
         if (i % NUM_PLAYERS < PLAYER_DRACULA) {
             j = 0;
             //If Hunter was teleported to St Joseph/Mary last round.
-            if (gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS] == 0) {
-               gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS] = GAME_START_HUNTER_LIFE_POINTS;
+            if (gameView->health[i/(MOVE_LENGTH) % NUM_PLAYERS] == 0) {
+               gameView->health[i/(MOVE_LENGTH) % NUM_PLAYERS] = GAME_START_HUNTER_LIFE_POINTS;
             }
             while ( j <= 6) {
                 switch (pastPlays[i+j]) {
@@ -86,19 +82,19 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
                         }
                     case 'T':
                         if (j % 8 == 3) {
-                            gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS] -= LIFE_LOSS_TRAP_ENCOUNTER; 
+                            gameView->health[i/(MOVE_LENGTH) % NUM_PLAYERS] -= LIFE_LOSS_TRAP_ENCOUNTER; 
                         } break;
                     case 'D':
                         if (j % 8 == 5) {
-                            gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS] -= LIFE_LOSS_DRACULA_ENCOUNTER;
+                            gameView->health[i/(MOVE_LENGTH) % NUM_PLAYERS] -= LIFE_LOSS_DRACULA_ENCOUNTER;
                             gameView->health[PLAYER_DRACULA] -= LIFE_LOSS_HUNTER_ENCOUNTER;
                         } break;                      
                 }
                 if (j % 8 == 1) {
                     if (pastPlays[i+j] == pastPlays[i+j-40] && pastPlays[i+j+1] == pastPlays[i+j+1-40]) {
-                        gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS] += LIFE_GAIN_REST;
-                        if (gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS] > 9) {
-                           gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS] = 9;
+                        gameView->health[i/(MOVE_LENGTH) % NUM_PLAYERS] += LIFE_GAIN_REST;
+                        if (gameView->health[i/(MOVE_LENGTH) % NUM_PLAYERS] > 9) {
+                           gameView->health[i/(MOVE_LENGTH) % NUM_PLAYERS] = 9;
                         }
                     }
                 }
@@ -178,7 +174,7 @@ Round getRound(GameView currentView)
 PlayerID getCurrentPlayer(GameView currentView)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return (PlayerID( currentView->turns % NUM_PLAYERS));
+    return ((PlayerID)(currentView->turns % NUM_PLAYERS));
 }
 
 // Get the current score
@@ -202,84 +198,12 @@ LocationID getLocation(GameView currentView, PlayerID player)
     return currentView->currLocation[player];
 }
 
-static void playerLocation (GameView gameView, char *pastPlays) {
-    char *ptr = pastPlays;
+static void playerLocation (GameView gameView) {
+    int i = 0;
 
-    /*
-    EXAMPLE:
-    GMN.... SPL.... HAM....
-    G is ptr
-    M is ptr+1
-    N is ptr+2
-    this function grabs location and puts into location array
-     */
-
-    while (*ptr != '\0') {
-        if (*ptr == 'G') {
-            char *abbrev = malloc (3*sizeof(char));
-            abbrev[0] = *(ptr+1);
-            abbrev[1] = *(ptr+2);
-            abbrev[2] = '\0';
-            gameView->currLocation[PLAYER_LORD_GODALMING] = abbrevToID(abbrev);
-            free(abbrev);
-        } else if (*ptr == 'S') {
-            char *abbrev = malloc (3*sizeof(char));
-            abbrev[0] = *(ptr+1);
-            abbrev[1] = *(ptr+2);
-            abbrev[2] = '\0';
-            gameView->currLocation[PLAYER_DR_SEWARD] = abbrevToID(abbrev);
-            free(abbrev);
-        } else if (*ptr == 'H') {
-            char *abbrev = malloc (3*sizeof(char));
-            abbrev[0] = *(ptr+1);
-            abbrev[1] = *(ptr+2);
-            abbrev[2] = '\0';
-            gameView->currLocation[PLAYER_VAN_HELSING] = abbrevToID(abbrev);
-            free(abbrev);
-        } else if (*ptr == 'M') {
-            char *abbrev = malloc (3*sizeof(char));
-            abbrev[0] = *(ptr+1);
-            abbrev[1] = *(ptr+2);
-            abbrev[2] = '\0';
-            gameView->currLocation[PLAYER_MINA_HARKER] = abbrevToID(abbrev);
-            free(abbrev);
-        } else if (*ptr == 'D') {
-            char *abbrev = malloc (3*sizeof(char));
-            abbrev[0] = *(ptr+1);
-            abbrev[1] = *(ptr+2);
-            abbrev[2] = '\0';
-
-            char *checkCity = "C?";
-            char *checkSea = "S?";
-            char *checkTeleport = "TP";
-            char *checkHide = "HI";
-
-            if (strcmp (abbrev, checkCity) == 0) { //string comparison, 0 is equal
-                gameView->currLocation[PLAYER_DRACULA] = CITY_UNKNOWN;
-            } else if (strcmp (abbrev, checkSea) == 0) {
-                gameView->currLocation[PLAYER_DRACULA] = SEA_UNKNOWN;
-            } else if (abbrev[0] == 'D') { //double back
-                if (abbrev[1] == '1') {
-                    gameView->currLocation[PLAYER_DRACULA] = DOUBLE_BACK_1;
-                } else if (abbrev[1] == '2') {
-                    gameView->currLocation[PLAYER_DRACULA] = DOUBLE_BACK_2;
-                } else if (abbrev[1] == '3') {
-                    gameView->currLocation[PLAYER_DRACULA] = DOUBLE_BACK_3;
-                } else if (abbrev[1] == '4') {
-                    gameView->currLocation[PLAYER_DRACULA] = DOUBLE_BACK_4;
-                } else if (abbrev[1] == '5') {
-                    gameView->currLocation[PLAYER_DRACULA] = DOUBLE_BACK_5;
-                }
-            } else if (strcmp (abbrev, checkTeleport) == 0) {
-                gameView->currLocation[PLAYER_DRACULA] == TELEPORT;
-            } else if (strcmp (abbrev, checkHide) == 0) {
-                gameView->currLocation[PLAYER_DRACULA] =HIDE;
-            } else {
-                gameView->currLocation[PLAYER_DRACULA] = abbrevToID(abbrev);
-            }
-            free(abbrev);
-        }
-        ptr += (MOVE_LENGTH + 1);
+    while (i < NUM_PLAYERS) {
+        gameView->currLocation[i] = gameView->trails[i][0];
+        i++;    
     }
 }
 
@@ -322,9 +246,9 @@ static void fillTrails (GameView gameView, char *pastPlays){
                             gameView->trails[o][m] = DOUBLE_BACK_5;
                         }
                     } else if (strcmp (abbrev, checkTeleport) == 0) {
-                        gameView->trails[o][m] == TELEPORT;
+                        gameView->trails[o][m] = TELEPORT;
                     } else if (strcmp (abbrev, checkHide) == 0) {
-                        gameView->trails[o][m] =HIDE;
+                        gameView->trails[o][m] = HIDE;
                     } else {
                         gameView->trails[o][m] = abbrevToID(abbrev);
                     }
@@ -368,12 +292,12 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
                                LocationID from, PlayerID player, Round round,
                                int road, int rail, int sea)
 {
-    assert(0 <= player < 5);
-    assert(0 <= LocationID < currentView->m->nV);
+    assert(0 <= player && player < 5);
+    assert(0 <= LocationID && LocationID < currentView->m->nV);
 
     Set mainset = newSet();
     Set railset = newSet();
-    InsertInto(mainset,from);
+    insertInto(mainset,from);
     Queue q = newQueue();
     int qval;
     int qdepth;
@@ -403,8 +327,11 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
         }
     }
     while(curLink != NULL){//inserts boat and road connections into mainset
-        if((road == TRUE && curLink->type == ROAD) || (boat == TRUE && curLink->type = BOAT)){
-            InsertInto(mainset,curLink->v);
+        if((road == TRUE && curLink->type == ROAD) || (boat == TRUE && curLink->type = BOAT)){            
+            if(curLink->v != ST_JOSEPH_AND_ST_MARYS){
+                InsertInto(mainset,curLink->v);
+            }
+
         }
         curLink = curLink->next;
     }
