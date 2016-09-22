@@ -50,7 +50,7 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
 
     fillTrails(gameView, pastPlays);
     playerLocation(gameView);
-    gameView->score = calcScore (pastPlays);
+    //gameView->score = calcScore (pastPlays);
 
     gameView->currPlayer = (gameView->turns) % 5;
 
