@@ -70,7 +70,7 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
     while (pastPlays[i] != '\0') {
         //Hunters' turns.
         if ((i/MOVE_LENGTH) % NUM_PLAYERS < PLAYER_DRACULA) {
-            j = 0;
+            j = 1;
             //If Hunter was teleported to St Joseph/Mary last round.
             if (gameView->health[i/(MOVE_LENGTH) % NUM_PLAYERS] == 0) {
                gameView->health[i/(MOVE_LENGTH) % NUM_PLAYERS] = GAME_START_HUNTER_LIFE_POINTS;
@@ -103,7 +103,7 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
             }
         //Dracula's Turn.
         } else {
-            j = 0;
+            j = 1;
             //Processing the turn.
             while ( j <= 6) {
                 switch (pastPlays[i+j]) {
@@ -135,11 +135,26 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
                     case 'T':
                         if (pastPlays[i+j+1] == 'S') {
                             gameView->health[PLAYER_DRACULA] -= LIFE_LOSS_SEA;
-
                         //Dracula teleports to Castle Dracula.
                         } else if (pastPlays[i+j+1] == 'P') {
                             gameView->health[PLAYER_DRACULA] += LIFE_GAIN_CASTLE_DRACULA;
-                        } break;  
+                        } break;
+                    case 'D':
+                        if (('1' <= pastPlays[i+j+1]) && (pastPlays[i+j+1] <= '5')) {
+                            char *abbrev = malloc (3*sizeof(char));
+                            assert(abbrev != NULL);
+                            abbrev[0] = pastPlays[i+j-40];
+                            abbrev[1] = pastPlays[i+j-39];
+                            abbrev[2] = '\0';
+                            
+                            if (strcmp(abbrev, "S?") == 0) {
+                               gameView->health[PLAYER_DRACULA] -= LIFE_LOSS_SEA; 
+                            } else if (idToType(abbrevToID(abbrev)) == SEA) {
+                               gameView->health[PLAYER_DRACULA] -= LIFE_LOSS_SEA;
+                            }
+
+                            free(abbrev);
+                        } 
                     //A vampire matures.                                          
                     case 'V':
                         if (j % 8 == 6) {
