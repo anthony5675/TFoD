@@ -327,8 +327,11 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
         }
     }
     while(curLink != NULL){//inserts boat and road connections into mainset
-        if((road == TRUE && curLink->type == ROAD) || (boat == TRUE && curLink->type = BOAT)){
-            InsertInto(mainset,curLink->v);
+        if((road == TRUE && curLink->type == ROAD) || (boat == TRUE && curLink->type = BOAT)){            
+            if(curLink->v != ST_JOSEPH_AND_ST_MARYS){
+                InsertInto(mainset,curLink->v);
+            }
+
         }
         curLink = curLink->next;
     }
