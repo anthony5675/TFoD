@@ -36,7 +36,7 @@ struct gameView {
     LocationID currLocation[NUM_PLAYERS];
     Map m;
 };
-     
+
 
 GameView newGameView(char *pastPlays, PlayerMessage messages[])
 {
@@ -203,6 +203,9 @@ static void playerLocation (GameView gameView) {
 
     while (i < NUM_PLAYERS) {
         gameView->currLocation[i] = gameView->trails[i][0];
+        if (gameView->turns == 0) {
+            gameView->currLocation[i] = UNKNOWN_LOCATION;
+        }
         i++;    
     }
 }

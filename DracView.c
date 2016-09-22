@@ -100,7 +100,7 @@ void lastMove(DracView currentView, PlayerID player,
 void whatsThere(DracView currentView, LocationID where,
                          int *numTraps, int *numVamps)
 {
-
+    
 }
 
 //// Functions that return information about the history of the game
@@ -109,7 +109,7 @@ void whatsThere(DracView currentView, LocationID where,
 void giveMeTheTrail(DracView currentView, PlayerID player,
                             LocationID trail[TRAIL_SIZE])
 {
-    getHistory (currentView->g, player, trail);
+    getHistory (currentView->game, player, trail);
 }
 
 //// Functions that query the map to find information about connectivity
