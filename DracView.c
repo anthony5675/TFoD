@@ -9,6 +9,7 @@
 #define NUM_TRAPS 2
 #define TRAPS 0
 #define VAMPS 1
+#define MOVE_LENGTH 7
 // #include "Map.h" ... if you decide to use the Map ADT
 
 static void calcTraps (char *pastPlays, DracView gameView);
@@ -155,7 +156,7 @@ static void calcTraps (char *pastPlays, DracView gameView) {
         gameView->minions[i][VAMPS] = 0;
         i++;
     }
-    if (gameView->currRound == 0) {
+    if (giveMeTheRound (gameView) == 0) {
         return; //no traps placed
     } 
 
