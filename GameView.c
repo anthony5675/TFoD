@@ -17,7 +17,7 @@
 //Helper Functions
 static void playerLocation (GameView gameView);
 static void fillTrails (GameView gameView, char *pastPlays);
-static int calcScore (char *pastPlays);
+//static int calcScore (char *pastPlays);
 
 /*struct trap{
    int turnPlaced;
@@ -380,6 +380,8 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
     free(locarray);
     return giveSet;
 }
+
+/*
 static int calcScore (char *pastPlays) {
     char *ptr = pastPlays;
     char *location = &pastPlays[1];
@@ -403,3 +405,4 @@ static int calcScore (char *pastPlays) {
     }
     return score;
 }
+*/
