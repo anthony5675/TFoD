@@ -79,6 +79,7 @@ LocationID whereIs(DracView currentView, PlayerID player)
             location = trail[5];
         }
     } 
+    free(trail);
     return location;
 }
 
@@ -92,6 +93,7 @@ void lastMove(DracView currentView, PlayerID player,
     getHistory (currentView->game, player, trail);
 
     *start = trail[1]; //most recent move;
+    free(trail);
 }
 
 // Find out what minions are placed at the specified location
@@ -107,7 +109,7 @@ void whatsThere(DracView currentView, LocationID where,
 void giveMeTheTrail(DracView currentView, PlayerID player,
                             LocationID trail[TRAIL_SIZE])
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+    getHistory (currentView->g, player, trail);
 }
 
 //// Functions that query the map to find information about connectivity
