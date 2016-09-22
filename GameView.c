@@ -11,7 +11,7 @@
 #include "Map.h"
 #include "set.h"
 #include "queue.h"
-
+//#include <stdio.h>
 #define MOVE_LENGTH 8
 
 //Helper Functions
@@ -345,7 +345,7 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
         while(!emptyQueue(q)){
             qdepth = getDepth(q);
             qval = leaveQueue(q);
-            if (qdepth < (currentView->currRound+player)%4){
+            if (qdepth < (currentView->round+player)%4){
                 neibsize = typeNeighbours(currentView->m, qval, RAIL, locarray);
                 int i;
                 for (i = 0; i < neibsize; i++){
@@ -358,6 +358,7 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
             }
         }
     }
+        //printf("%d\n",nElems(mainset));
     neibsize = typeNeighbours(currentView->m, from, BOAT, locarray);
     int i;
     for (i = 0; i < neibsize; i++){
@@ -365,12 +366,15 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
             insertInto(mainset,locarray[i]);
         }
     } 
+        //printf("%d\n",nElems(mainset));
+
     neibsize = typeNeighbours(currentView->m, from, ROAD, locarray);
     for (i = 0; i < neibsize; i++){
         if(!isElem(mainset,locarray[i] && (player != PLAYER_DRACULA || locarray[i] != ST_JOSEPH_AND_ST_MARYS))){
             insertInto(mainset,locarray[i]);
         }
     }
+    //printf("%d\n",nElems(mainset));
 
 
     *numLocations = nElems(mainset);
