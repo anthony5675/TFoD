@@ -173,11 +173,11 @@ static void calcTraps (char *pastPlays, DracView gameView) {
                 gameView->minions[locID][VAMPS]++;
             } else if (*(ptr+5) == 'V') { //vampire matures
                 LocationID past[TRAIL_SIZE];
-                getHistory (gameView, PLAYER_DRACULA, past);
+                giveMeTheTrail (gameView, PLAYER_DRACULA, past);
                 gameView->minions[past[TRAIL_SIZE-1]][VAMPS]--; //location 6 moves ago
             } else if (*(ptr+5) == 'M') { //trap falls off trail
                 LocationID past[TRAIL_SIZE];
-                getHistory (gameView, PLAYER_DRACULA, past);
+                giveMeTheTrail (gameView, PLAYER_DRACULA, past);
                 gameView->minions[past[TRAIL_SIZE-1]][TRAPS]--;
             }
         } else { //hunters encountering the traps
