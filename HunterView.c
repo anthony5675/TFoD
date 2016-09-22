@@ -53,7 +53,7 @@ int giveMeTheScore(HunterView currentView)
 // Get the current health points for a given player
 int howHealthyIs(HunterView currentView, PlayerID player)
 {
-    return getHealth(currentView->game);
+    return getHealth(currentView->game, player);
 }
 
 // Get the current location id of a given player
