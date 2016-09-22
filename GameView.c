@@ -11,7 +11,6 @@
 #include "Map.h"
 #include "set.h"
 #include "queue.h"
-//#include <stdio.h>
 #define MOVE_LENGTH 8
 
 //Helper Functions
@@ -329,11 +328,11 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
                                LocationID from, PlayerID player, Round round,
                                int road, int rail, int sea)
 {
-    //assert(0 <= player && player < 5); not meant to include thse in final submission
-    //assert(validPlace(from));
+
     Set mainset = newSet();
     insertInto(mainset,from);
     Queue q = newQueue();
+    showSet(mainset);
     int qval;
     int qdepth;
     LocationID curID = from;
@@ -358,8 +357,7 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
             }
         }
     }
-        //printf("%d\n",nElems(mainset));
-    showQueue(q);
+    showSet(mainset);
     neibsize = typeNeighbours(currentView->m, from, BOAT, locarray);
     int i;
     for (i = 0; i < neibsize; i++){
@@ -367,15 +365,16 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
             insertInto(mainset,locarray[i]);
         }
     } 
-        //printf("%d\n",nElems(mainset));
 
     neibsize = typeNeighbours(currentView->m, from, ROAD, locarray);
     for (i = 0; i < neibsize; i++){
         if(!isElem(mainset,locarray[i] && (player != PLAYER_DRACULA || locarray[i] != ST_JOSEPH_AND_ST_MARYS))){
+            showSet(mainset);
             insertInto(mainset,locarray[i]);
         }
     }
-    //printf("%d\n",nElems(mainset));
+        showSet(mainset);
+
 
 
     *numLocations = nElems(mainset);

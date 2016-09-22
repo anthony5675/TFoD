@@ -352,12 +352,12 @@ int typeNeighbours(Map g, LocationID from, TransportID type, LocationID *locatio
    VList curLink= g->connections[from];
    while(curLink != NULL){//inserts boat and road connections into mainset
       if(type == curLink->type){            
-         locations[num] = curLink->type;
+         locations[num] = curLink->v;
          num++;
       }
       curLink = curLink->next;
    }
-   return (num+1);
+   return (num);
 
 
 
