@@ -214,11 +214,11 @@ static void fillTrails (GameView gameView, char *pastPlays){
     //Filling the trail arrays.
     int m = 0, n = 0;
     int o = (gameView->turns % NUM_PLAYERS) - 1;
+    int index = sizeof(pastPlays) - 6;
     if (o < 0) {
         o = 0;
         index = 0;
     }
-    int index = sizeof(pastPlays) - 6;
     char *abbrev = malloc (3*sizeof(char));
     assert(abbrev != NULL);
     abbrev[2] = '\0';
