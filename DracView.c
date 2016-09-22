@@ -11,19 +11,19 @@
 #define VAMPS 1
 // #include "Map.h" ... if you decide to use the Map ADT
 
-static void calcTraps (char *pastPlays, GameView gameView);
-     
+static void calcTraps (char *pastPlays, DracView gameView);
+   
 struct dracView {
     GameView game;
     int minions[NUM_MAP_LOCATIONS][NUM_TRAPS];
 };
-     
+
 
 // Creates a new DracView to summarise the current state of the game
 DracView newDracView(char *pastPlays, PlayerMessage messages[])
 {
     DracView dracView = malloc (sizeof (struct dracView));
-    dracView->game = newGameView(pastPlays, dracView);
+    dracView->game = newGameView(pastPlays, messages);
     calcTraps (pastPlays, dracView);
     return dracView;
 }
@@ -32,7 +32,7 @@ DracView newDracView(char *pastPlays, PlayerMessage messages[])
 // Frees all memory previously allocated for the DracView toBeDeleted
 void disposeDracView(DracView toBeDeleted)
 {
-    disposeGameView (toBeDelted->game);
+    disposeGameView (toBeDeleted->game);
     free( toBeDeleted );
 }
 
@@ -147,7 +147,7 @@ LocationID *whereCanTheyGo(DracView currentView, int *numLocations,
     }
 }
 
-static void calcTraps (char *pastPlays, GameView gameView) {
+static void calcTraps (char *pastPlays, DracView gameView) {
     char *ptr = pastPlays;
     int i = 0; //location index;
     while (i < NUM_MAP_LOCATIONS) {
