@@ -11,13 +11,15 @@
 #include "Map.h"
 #include "set.h"
 #include "queue.h"
-#define NUM_TRAPS 18
-#define NUM_IMVAMP 3
+//#define NUM_TRAPS 2 // either vamp or trap
+//#define TRAPS 0
+//#define vamps 1
 #define MOVE_LENGTH 8
 
 //Helper Functions
 static void playerLocation (GameView gameView);
 static void fillTrails (GameView gameView, char *pastPlays);
+static void calcTraps (char *pastPlays, GameView gameView);
 
 /*struct trap{
    int turnPlaced;
@@ -34,6 +36,7 @@ struct gameView {
     PlayerID trails[NUM_PLAYERS][TRAIL_SIZE];
     int health[NUM_PLAYERS];
     LocationID currLocation[NUM_PLAYERS];
+    int minions[NUM_MAP_LOCATIONS][NUM_TRAPS];
     Map m;
 };
 
@@ -222,7 +225,7 @@ static void fillTrails (GameView gameView, char *pastPlays){
     char *checkSea = "S?";
     char *checkTeleport = "TP";
     char *checkHide = "HI";
-     
+    
     while (m < TRAIL_SIZE) {
         n = 0;
         while (n < NUM_PLAYERS) {
@@ -351,3 +354,37 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
     disposeQueue(mainqueue);
     return locations;
 }
+
+/*
+static void calcTraps (char *pastPlays, GameView gameView) {
+    char *ptr = pastPlays;
+    int i = 0; //location index;
+    while (i < NUM_MAP_LOCATIONS) {
+        gameView->minions[i][TRAPS] = 0;
+        gameView->minions[i][VAMPS] = 0;
+        i++;
+    }
+    if (gameView->currRound == 0) {
+        return; //no traps placed
+    } 
+
+    while (*ptr != '\0') {
+        char *abbrev = malloc(3*sizeof(char));
+        abbrev[0] = *(ptr+1);
+        abbrev[1] = *(ptr+2);
+        abbrev[2] = '\0';
+        int locID = abbrevToID(abbrev);
+
+        if (*ptr == 'D') {
+            if (*(ptr+3) == 'T') {
+                gameView->minions[locID][TRAPS]++;
+            } else if (*(ptr+4) == 'V') {
+                gameView->minions[locID][VAMPS]++;
+            } else if (*(ptr+5) == 'V') { //vampire matures
+                LocationID past[TRAIL_SIZE] = getHistory (gameView, PLAYER_DRACULA, past);
+                gameView->minions[past[TRAIL_SIZE-1]][VAMPS]--;
+            }
+        }
+    }
+}
+*/
