@@ -330,7 +330,6 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
     Set mainset = newSet();
     insertInto(mainset,from);
     Queue q = newQueue();
-    showSet(mainset);
     int qval;
     int qdepth;
     LocationID curID = from;
@@ -356,22 +355,25 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
         }
     }
     showSet(mainset);
-    neibsize = typeNeighbours(currentView->m, from, BOAT, locarray);
-    int i;
-    for (i = 0; i < neibsize; i++){
-        if(!isElem(mainset,locarray[i] && (player != PLAYER_DRACULA || locarray[i] != ST_JOSEPH_AND_ST_MARYS))){
-            insertInto(mainset,locarray[i]);
-        }
-    } 
-
-    neibsize = typeNeighbours(currentView->m, from, ROAD, locarray);
-    for (i = 0; i < neibsize; i++){
-        if(!isElem(mainset,locarray[i] && (player != PLAYER_DRACULA || locarray[i] != ST_JOSEPH_AND_ST_MARYS))){
-            showSet(mainset);
-            insertInto(mainset,locarray[i]);
+    if(sea){
+        neibsize = typeNeighbours(currentView->m, from, BOAT, locarray);
+        int i;
+        for (i = 0; i < neibsize; i++){
+            if(!isElem(mainset,locarray[i] && (player != PLAYER_DRACULA || locarray[i] != ST_JOSEPH_AND_ST_MARYS))){
+                insertInto(mainset,locarray[i]);
+            }
+        } 
+    }
+    if(road){
+        neibsize = typeNeighbours(currentView->m, from, ROAD, locarray);
+        int i;
+        for (i = 0; i < neibsize; i++){
+            if(!isElem(mainset,locarray[i] && (player != PLAYER_DRACULA || locarray[i] != ST_JOSEPH_AND_ST_MARYS))){
+                insertInto(mainset,locarray[i]);
+            }
         }
     }
-        showSet(mainset);
+    showSet(mainset);
 
 
 
