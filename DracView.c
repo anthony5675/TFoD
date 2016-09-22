@@ -6,6 +6,8 @@
 #include "Game.h"
 #include "GameView.h"
 #include "DracView.h"
+#define TRAPS 0
+#define vamps 1
 // #include "Map.h" ... if you decide to use the Map ADT
      
 struct dracView {
@@ -18,6 +20,7 @@ DracView newDracView(char *pastPlays, PlayerMessage messages[])
 {
     DracView dracView = malloc (sizeof (struct dracView));
     dracView->game = newGameView(pastPlays, dracView);
+    calcTraps (pastPlays, dracView->game);
     return dracView;
 }
      
@@ -100,7 +103,8 @@ void lastMove(DracView currentView, PlayerID player,
 void whatsThere(DracView currentView, LocationID where,
                          int *numTraps, int *numVamps)
 {
-    
+    *numTraps = currentView->game->minions[where][TRAPS];
+    *numVamps = currentView->game->minions[where][VAMPS];
 }
 
 //// Functions that return information about the history of the game
@@ -117,14 +121,24 @@ void giveMeTheTrail(DracView currentView, PlayerID player,
 // What are my (Dracula's) possible next moves (locations)
 LocationID *whereCanIgo(DracView currentView, int *numLocations, int road, int sea)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return NULL;
+    LocationID from = whereIs (currentView, PLAYER_DRACULA);
+    Round round = giveMeTheRound (currentView);
+    return connectedLocations(currentView->game, numLocations,
+                               from, PLAYER_DRACULA, round,
+                               road, FALSE, sea);
 }
 
 // What are the specified player's next possible moves
 LocationID *whereCanTheyGo(DracView currentView, int *numLocations,
                            PlayerID player, int road, int rail, int sea)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return NULL;
+    LocationID from = whereIs (currentView, player);
+    Round round = giveMeTheRound (currentView);
+    if (player != PLAYER_DRACULA) {
+    return connectedLocations(currentView->game, numLocations,
+                               from, player, round,
+                               road, rail, sea);
+    } else {
+        return whereCanIgo (currentView, numLocations, road, sea);
+    }
 }
