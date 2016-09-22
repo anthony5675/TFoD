@@ -19,7 +19,7 @@
 //Helper Functions
 static void playerLocation (GameView gameView);
 static void fillTrails (GameView gameView, char *pastPlays);
-static void calcTraps (char *pastPlays, GameView gameView);
+//static void calcTraps (char *pastPlays, GameView gameView);
 
 /*struct trap{
    int turnPlaced;
