@@ -40,6 +40,7 @@ struct gameView {
 GameView newGameView(char *pastPlays, PlayerMessage messages[])
 {
     GameView gameView = malloc(sizeof(struct gameView));
+    assert(gameView != NULL);
     
     gameView->m = newMap();
     //See "The Data" page on webcms for more info.
@@ -65,7 +66,7 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
         };
     }
     
-    int i, j, k = 0;
+    int i = 0, j = 0, k = 0;
     while (pastPlays[i] != '\0') {
         if (i % NUM_PLAYERS < PLAYER_DRACULA) {
             j = 0;
@@ -211,10 +212,15 @@ static void playerLocation (GameView gameView) {
 
 static void fillTrails (GameView gameView, char *pastPlays){
     //Filling the trail arrays.
-    int m, n = 0;
+    int m = 0, n = 0;
     int o = (gameView->turns % NUM_PLAYERS) - 1;
+    if (o < 0) {
+        o = 0;
+        index = 0;
+    }
     int index = sizeof(pastPlays) - 6;
     char *abbrev = malloc (3*sizeof(char));
+    assert(abbrev != NULL);
     abbrev[2] = '\0';
     
     char *checkCity = "C?";
@@ -304,6 +310,7 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
     LocationID curID = from;
     int neibsize;
     LocationID *locarray = malloc(sizeof(LocationID)*numV(currentView->m));
+    assert(locarray != NULL);
     if(rail == TRUE && player != PLAYER_DRACULA){//adds rails
         enterQueue(q,curID,0);
         while(!emptyQueue(q)){
