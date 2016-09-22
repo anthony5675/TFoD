@@ -17,6 +17,7 @@
 //Helper Functions
 static void playerLocation (GameView gameView);
 static void fillTrails (GameView gameView, char *pastPlays);
+static int calcScore (char *pastPlays);
 
 /*struct trap{
    int turnPlaced;
@@ -47,12 +48,9 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
     gameView->turns = (strlen(pastPlays)+1)/(MOVE_LENGTH);
     gameView->currRound = gameView->turns/NUM_PLAYERS;
 
-    gameView->score = GAME_START_SCORE;
-    gameView->score -= gameView->currRound; //-1 loss for each of D's turn
-    
-    
     fillTrails(gameView, pastPlays);
     playerLocation(gameView);
+    gameView->score = calcScore (pastPlays);
 
     gameView->currPlayer = (gameView->turns) % 5;
 
