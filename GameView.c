@@ -68,28 +68,29 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
     
     int i = 0, j = 0, k = 0;
     while (pastPlays[i] != '\0') {
-        if (i % NUM_PLAYERS < PLAYER_DRACULA) {
+        //Hunters' turns.
+        if ((i/MOVE_LENGTH) % NUM_PLAYERS < PLAYER_DRACULA) {
             j = 0;
             //If Hunter was teleported to St Joseph/Mary last round.
             if (gameView->health[i/(MOVE_LENGTH) % NUM_PLAYERS] == 0) {
                gameView->health[i/(MOVE_LENGTH) % NUM_PLAYERS] = GAME_START_HUNTER_LIFE_POINTS;
             }
+            //Processing the turn.
             while ( j <= 6) {
                 switch (pastPlays[i+j]) {
-                    case 'S':
-                        if (pastPlays[i+j+1] == '?') {
-                            gameView->health[PLAYER_DRACULA] -= LIFE_LOSS_SEA;
-                        }
+                    //Hunter runs into a trap.
                     case 'T':
-                        if (j % 8 == 3) {
+                        if (j % 8 > 2) {
                             gameView->health[i/(MOVE_LENGTH) % NUM_PLAYERS] -= LIFE_LOSS_TRAP_ENCOUNTER; 
                         } break;
+                    //Hunter runs into Dracula.
                     case 'D':
-                        if (j % 8 == 5) {
+                        if (j % 8 > 2) {
                             gameView->health[i/(MOVE_LENGTH) % NUM_PLAYERS] -= LIFE_LOSS_DRACULA_ENCOUNTER;
                             gameView->health[PLAYER_DRACULA] -= LIFE_LOSS_HUNTER_ENCOUNTER;
                         } break;                      
                 }
+                //Checking if the Hunter is resting.
                 if (j % 8 == 1) {
                     if (pastPlays[i+j] == pastPlays[i+j-40] && pastPlays[i+j+1] == pastPlays[i+j+1-40]) {
                         gameView->health[i/(MOVE_LENGTH) % NUM_PLAYERS] += LIFE_GAIN_REST;
@@ -100,10 +101,13 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
                 }
                 j++;
             }
+        //Dracula's Turn.
         } else {
             j = 0;
+            //Processing the turn.
             while ( j <= 6) {
                 switch (pastPlays[i+j]) {
+                    //Dracula moves to a sea.
                     case 'A':
                         if (pastPlays[i+j+1] == 'S' || pastPlays[i+j+1] == 'O') {
                             gameView->health[PLAYER_DRACULA] -= LIFE_LOSS_SEA;
@@ -124,12 +128,19 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
                         if (pastPlays[i+j+1] == 'S') {
                             gameView->health[PLAYER_DRACULA] -= LIFE_LOSS_SEA;
                         } break;
+                    case 'S':
+                        if (pastPlays[i+j+1] == '?') {
+                            gameView->health[PLAYER_DRACULA] -= LIFE_LOSS_SEA;
+                        } break;
                     case 'T':
                         if (pastPlays[i+j+1] == 'S') {
                             gameView->health[PLAYER_DRACULA] -= LIFE_LOSS_SEA;
+
+                        //Dracula teleports to Castle Dracula.
                         } else if (pastPlays[i+j+1] == 'P') {
                             gameView->health[PLAYER_DRACULA] += LIFE_GAIN_CASTLE_DRACULA;
-                        } break;                                            
+                        } break;  
+                    //A vampire matures.                                          
                     case 'V':
                         if (j % 8 == 6) {
                             gameView->score -= SCORE_LOSS_VAMPIRE_MATURES;
@@ -137,7 +148,8 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
                 }
                 j++;
             }   
-        }   
+        }
+        //Checking if the players run out of health.   
         for (k = 0; k < NUM_PLAYERS; k++) {
             if (gameView->health[k] <= 0 && k == PLAYER_DRACULA) {
                 //GAME OVER?
