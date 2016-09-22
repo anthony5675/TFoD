@@ -13,7 +13,7 @@
 #include "queue.h"
 #define NUM_TRAPS 2 // either vamp or trap
 #define TRAPS 0
-#define vamps 1
+#define VAMPS 1
 #define MOVE_LENGTH 8
 
 //Helper Functions
@@ -56,6 +56,7 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
     
     fillTrails(gameView, pastPlays);
     playerLocation(gameView);
+    calcTraps(pastPlays,gameView);
 
     gameView->currPlayer = (gameView->turns) % 5;
 
