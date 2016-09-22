@@ -382,3 +382,26 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
     free(locarray);
     return giveSet;
 }
+static int calcScore (char *pastPlays) {
+    char *ptr = pastPlays;
+    char *location = &pastPlays[1];
+    char *action = &pastPlays[5];
+    int score = GAME_START_SCORE;
+
+    while (*ptr != '\0') {
+        if (*ptr == 'D') {
+            score -= SCORE_LOSS_DRACULA_TURN;
+        }
+
+        if (*ptr == 'D' && *action == 'v') {
+            score -= SCORE_LOSS_VAMPIRE_MATURES;
+        } else if (*ptr != 'D' && *loc == 'J') {
+            score -= SCORE_LOSS_HUNTER_HOSPITAL;
+        }
+
+        ptr += (MOVE_LENGTH + 1);
+        action += (MOVE_LENGTH + 1);
+        location +=(MOVE_LENGTH + 1)
+    }
+    return score;
+}
