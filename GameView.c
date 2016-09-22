@@ -33,7 +33,6 @@ struct gameView {
     PlayerID trails[NUM_PLAYERS][TRAIL_SIZE];
     int health[NUM_PLAYERS];
     LocationID currLocation[NUM_PLAYERS];
-    int minions[NUM_MAP_LOCATIONS][NUM_TRAPS];
     Map m;
 };
 
