@@ -6,12 +6,16 @@
 #include "Game.h"
 #include "GameView.h"
 #include "DracView.h"
+#define NUM_TRAPS 2
 #define TRAPS 0
-#define vamps 1
+#define VAMPS 1
 // #include "Map.h" ... if you decide to use the Map ADT
+
+static void calcTraps (char *pastPlays, GameView gameView);
      
 struct dracView {
     GameView game;
+    int minions[NUM_MAP_LOCATIONS][NUM_TRAPS];
 };
      
 
@@ -20,7 +24,7 @@ DracView newDracView(char *pastPlays, PlayerMessage messages[])
 {
     DracView dracView = malloc (sizeof (struct dracView));
     dracView->game = newGameView(pastPlays, dracView);
-    calcTraps (pastPlays, dracView->game);
+    calcTraps (pastPlays, dracView);
     return dracView;
 }
      
@@ -103,8 +107,8 @@ void lastMove(DracView currentView, PlayerID player,
 void whatsThere(DracView currentView, LocationID where,
                          int *numTraps, int *numVamps)
 {
-    *numTraps = currentView->game->minions[where][TRAPS];
-    *numVamps = currentView->game->minions[where][VAMPS];
+    *numTraps = currentView->minions[where][TRAPS];
+    *numVamps = currentView->minions[where][VAMPS];
 }
 
 //// Functions that return information about the history of the game
@@ -142,3 +146,53 @@ LocationID *whereCanTheyGo(DracView currentView, int *numLocations,
         return whereCanIgo (currentView, numLocations, road, sea);
     }
 }
+
+static void calcTraps (char *pastPlays, GameView gameView) {
+    char *ptr = pastPlays;
+    int i = 0; //location index;
+    while (i < NUM_MAP_LOCATIONS) {
+        gameView->minions[i][TRAPS] = 0;
+        gameView->minions[i][VAMPS] = 0;
+        i++;
+    }
+    if (gameView->currRound == 0) {
+        return; //no traps placed
+    } 
+
+    while (*ptr != '\0') {
+        char *abbrev = malloc(3*sizeof(char));
+        abbrev[0] = *(ptr+1);
+        abbrev[1] = *(ptr+2);
+        abbrev[2] = '\0';
+        int locID = abbrevToID(abbrev);
+
+        if (*ptr == 'D') {
+            if (*(ptr+3) == 'T') {
+                gameView->minions[locID][TRAPS]++;
+            } else if (*(ptr+4) == 'V') {
+                gameView->minions[locID][VAMPS]++;
+            } else if (*(ptr+5) == 'V') { //vampire matures
+                LocationID past[TRAIL_SIZE];
+                getHistory (gameView, PLAYER_DRACULA, past);
+                gameView->minions[past[TRAIL_SIZE-1]][VAMPS]--; //location 6 moves ago
+            } else if (*(ptr+5) == 'M') { //trap falls off trail
+                LocationID past[TRAIL_SIZE];
+                getHistory (gameView, PLAYER_DRACULA, past);
+                gameView->minions[past[TRAIL_SIZE-1]][TRAPS]--;
+            }
+        } else { //hunters encountering the traps
+            int i = 0;
+            while (i < 4) { //4 possible encounters after location chars
+                if (*ptr+(2+i) == 'T') {
+                    gameView->minions[locID][TRAPS]--; //disarm trap
+                }  else if (*(ptr+(2+i)) == 'V') {
+                    gameView->minions[locID][VAMPS]--;
+                }
+                i++;
+            }
+        }
+        free(abbrev);
+        ptr += (MOVE_LENGTH + 1);
+    }
+}
+
