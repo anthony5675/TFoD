@@ -1,4 +1,4 @@
-// Map.c ... implementation of Map type
+   // Map.c ... implementation of Map type
 // (a specialised version of the Map ADT)
 // You can change this as much as you want
 
@@ -343,4 +343,22 @@ static void addConnections(Map g)
    addLink(g, MEDITERRANEAN_SEA, TYRRHENIAN_SEA, BOAT);
    addLink(g, NAPLES, TYRRHENIAN_SEA, BOAT);
    addLink(g, ROME, TYRRHENIAN_SEA, BOAT);
+}
+
+//non map.c native functions
+//sets locations to  return size array of location IDs corresponding to directly connected locations of a certain type
+int typeNeighbours(Map g, locationID from, TransportID type, locationID *locations){
+   int num = 0;
+   VList curLink= g->connections[from];
+   while(curLink != NULL){//inserts boat and road connections into mainset
+      if(type == curLink->type){            
+         locations[num] = curLink->type;
+         num++;
+      }
+      curLink = curLink->next;
+   }
+   return (num+1);
+
+
+
 }

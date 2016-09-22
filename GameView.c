@@ -298,8 +298,8 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
                                LocationID from, PlayerID player, Round round,
                                int road, int rail, int sea)
 {
-    assert(0 <= player && player < 5);
-    assert(0 <= from && from < currentView->m->nV);
+    //assert(0 <= player && player < 5); not meant to include thse in final submission
+    //assert(validPlace(from));
 
     Set mainset = newSet();
     Set railset = newSet();
@@ -308,7 +308,7 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
     int qval;
     int qdepth;
     VList curLink= currentView->m->connections[from];
-
+    LocationID *locarray = malloc(sizeof(LocationID)*numV(currentView->m))
 
 
     if(rail == TRUE && player != PLAYER_DRACULA){//adds rails
