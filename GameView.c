@@ -12,14 +12,14 @@
 #include "set.h"
 #include "queue.h"
 #define NUM_TRAPS 2 // either vamp or trap
-//#define TRAPS 0
-//#define vamps 1
+#define TRAPS 0
+#define vamps 1
 #define MOVE_LENGTH 8
 
 //Helper Functions
 static void playerLocation (GameView gameView);
 static void fillTrails (GameView gameView, char *pastPlays);
-//static void calcTraps (char *pastPlays, GameView gameView);
+static void calcTraps (char *pastPlays, GameView gameView);
 
 /*struct trap{
    int turnPlaced;
@@ -27,7 +27,7 @@ static void fillTrails (GameView gameView, char *pastPlays);
 }
 */
 struct gameView {
-    Round currRound; //Round consists of 5 player turns;
+    Round currRound;
     PlayerID currPlayer;
     int score;
     int turns;
@@ -350,7 +350,6 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
     return giveSet;
 }
 
-/*
 static void calcTraps (char *pastPlays, GameView gameView) {
     char *ptr = pastPlays;
     int i = 0; //location index;
@@ -376,10 +375,27 @@ static void calcTraps (char *pastPlays, GameView gameView) {
             } else if (*(ptr+4) == 'V') {
                 gameView->minions[locID][VAMPS]++;
             } else if (*(ptr+5) == 'V') { //vampire matures
-                LocationID past[TRAIL_SIZE] = getHistory (gameView, PLAYER_DRACULA, past);
-                gameView->minions[past[TRAIL_SIZE-1]][VAMPS]--;
+                LocationID past[TRAIL_SIZE];
+                getHistory (gameView, PLAYER_DRACULA, past);
+                gameView->minions[past[TRAIL_SIZE-1]][VAMPS]--; //location 6 moves ago
+            } else if (*(ptr+5) == 'M') { //trap falls off trail
+                LocationID past[TRAIL_SIZE];
+                getHistory (gameView, PLAYER_DRACULA, past);
+                gameView->minions[past[TRAIL_SIZE-1]][TRAPS]--;
+            }
+        } else { //hunters encountering the traps
+            int i = 0;
+            while (i < 4) { //4 possible encounters after location chars
+                if (*ptr+(2+i) == 'T') {
+                    gameView->minions[locID][TRAPS]--; //disarm trap
+                }  else if (*(ptr+(2+i)) == 'V') {
+                    gameView->minions[locID][VAMPS]--;
+                }
+                i++;
             }
         }
+        free(abbrev);
+        ptr += (MOVE_LENGTH + 1);
     }
 }
-*/
+
