@@ -293,7 +293,7 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
                                int road, int rail, int sea)
 {
     assert(0 <= player && player < 5);
-    assert(0 <= LocationID && LocationID < currentView->m->nV);
+    assert(0 <= from && from < currentView->m->nV);
 
     Set mainset = newSet();
     Set railset = newSet();
