@@ -13,7 +13,7 @@
 #include "queue.h"
 #define NUM_TRAPS 18
 #define NUM_IMVAMP 3
-#define MOVE_LENGTH 7
+#define MOVE_LENGTH 8
 
 //Helper Functions
 static void playerLocation (GameView gameView);
@@ -44,7 +44,7 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
     
     gameView->m = newMap();
     //See "The Data" page on webcms for more info.
-    gameView->turns = (strlen(pastPlays)+1)/(MOVE_LENGTH + 1);
+    gameView->turns = (strlen(pastPlays)+1)/(MOVE_LENGTH);
     gameView->currRound = gameView->turns/NUM_PLAYERS;
 
     gameView->score = GAME_START_SCORE;
@@ -71,8 +71,8 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
         if (i % NUM_PLAYERS < PLAYER_DRACULA) {
             j = 0;
             //If Hunter was teleported to St Joseph/Mary last round.
-            if (gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS] == 0) {
-               gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS] = GAME_START_HUNTER_LIFE_POINTS;
+            if (gameView->health[i/(MOVE_LENGTH) % NUM_PLAYERS] == 0) {
+               gameView->health[i/(MOVE_LENGTH) % NUM_PLAYERS] = GAME_START_HUNTER_LIFE_POINTS;
             }
             while ( j <= 6) {
                 switch (pastPlays[i+j]) {
@@ -82,19 +82,19 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
                         }
                     case 'T':
                         if (j % 8 == 3) {
-                            gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS] -= LIFE_LOSS_TRAP_ENCOUNTER; 
+                            gameView->health[i/(MOVE_LENGTH) % NUM_PLAYERS] -= LIFE_LOSS_TRAP_ENCOUNTER; 
                         } break;
                     case 'D':
                         if (j % 8 == 5) {
-                            gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS] -= LIFE_LOSS_DRACULA_ENCOUNTER;
+                            gameView->health[i/(MOVE_LENGTH) % NUM_PLAYERS] -= LIFE_LOSS_DRACULA_ENCOUNTER;
                             gameView->health[PLAYER_DRACULA] -= LIFE_LOSS_HUNTER_ENCOUNTER;
                         } break;                      
                 }
                 if (j % 8 == 1) {
                     if (pastPlays[i+j] == pastPlays[i+j-40] && pastPlays[i+j+1] == pastPlays[i+j+1-40]) {
-                        gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS] += LIFE_GAIN_REST;
-                        if (gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS] > 9) {
-                           gameView->health[i/(MOVE_LENGTH + 1) % NUM_PLAYERS] = 9;
+                        gameView->health[i/(MOVE_LENGTH) % NUM_PLAYERS] += LIFE_GAIN_REST;
+                        if (gameView->health[i/(MOVE_LENGTH) % NUM_PLAYERS] > 9) {
+                           gameView->health[i/(MOVE_LENGTH) % NUM_PLAYERS] = 9;
                         }
                     }
                 }
