@@ -96,7 +96,7 @@ LocationID *whereCanIgo(HunterView currentView, int *numLocations,
 LocationID *whereCanTheyGo(HunterView currentView, int *numLocations,
                            PlayerID player, int road, int rail, int sea)
 {
-    PlayerID player = whoAmI(currentView);
+    //PlayerID me = whoAmI(currentView);
     int round = giveMeTheRound(currentView);
     LocationID location = whereIs(currentView, player);
 
