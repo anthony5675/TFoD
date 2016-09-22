@@ -9,17 +9,15 @@
 // #include "Map.h" ... if you decide to use the Map ADT
      
 struct dracView {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    int hello;
+    GameView game;
 };
      
 
 // Creates a new DracView to summarise the current state of the game
 DracView newDracView(char *pastPlays, PlayerMessage messages[])
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    DracView dracView = malloc(sizeof(struct dracView));
-    dracView->hello = 42;
+    DracView dracView = malloc (sizeof (struct dracView));
+    dracView->game = newGameView(pastPlays, dracView);
     return dracView;
 }
      
@@ -27,7 +25,7 @@ DracView newDracView(char *pastPlays, PlayerMessage messages[])
 // Frees all memory previously allocated for the DracView toBeDeleted
 void disposeDracView(DracView toBeDeleted)
 {
-    //COMPLETE THIS IMPLEMENTATION
+    disposeGameView (toBeDelted->game);
     free( toBeDeleted );
 }
 
@@ -38,44 +36,69 @@ void disposeDracView(DracView toBeDeleted)
 Round giveMeTheRound(DracView currentView)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    return getRound(currentView->game);
 }
 
 // Get the current score
 int giveMeTheScore(DracView currentView)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    return getScore(currentView->game);
 }
 
 // Get the current health points for a given player
 int howHealthyIs(DracView currentView, PlayerID player)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    return getHealth(currentView->game, player);
 }
 
 // Get the current location id of a given player
 LocationID whereIs(DracView currentView, PlayerID player)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    int location = getLocation(currentView->game, player);
+
+    int *trail = malloc (TRAIL_SIZE * sizeof(int)); // array of last 6 LocationID
+    giveMeTheTrail (currentView, player, trail);
+
+    //Doubleback: 
+    //doubleback_n gives returns dracula to the nth last move from trail.
+
+    if (player == PLAYER_DRACULA) {
+        if (location == TELEPORT) {
+            location = CASTLE_DRACULA;
+        } else if (location == DOUBLE_BACK_1) {
+            location = trail[1];
+        } else if (location == DOUBLE_BACK_2) {
+            location = trail[2];
+        } else if (location == DOUBLE_BACK_3) {
+            location = trail[3];
+        } else if (location == DOUBLE_BACK_4) {
+            location = trail[4];
+        } else if (location == DOUBLE_BACK_5) {
+            location = trail[5];
+        }
+    } 
+    return location;
 }
 
 // Get the most recent move of a given player
 void lastMove(DracView currentView, PlayerID player,
                  LocationID *start, LocationID *end)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return;
+    *end = getLocation(currentView->game, player);
+
+    int *trail = malloc (TRAIL_SIZE * sizeof(int));
+    getHistory (currentView->game, player, trail);
+
+    *start = trail[1]; //most recent move;
 }
 
 // Find out what minions are placed at the specified location
 void whatsThere(DracView currentView, LocationID where,
                          int *numTraps, int *numVamps)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return;
+    
 }
 
 //// Functions that return information about the history of the game
