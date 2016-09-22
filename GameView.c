@@ -292,12 +292,12 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
                                LocationID from, PlayerID player, Round round,
                                int road, int rail, int sea)
 {
-    assert(0 <= player < 5);
-    assert(0 <= LocationID < currentView->m->nV);
+    assert(0 <= player && player < 5);
+    assert(0 <= LocationID && LocationID < currentView->m->nV);
 
     Set mainset = newSet();
     Set railset = newSet();
-    InsertInto(mainset,from);
+    insertInto(mainset,from);
     Queue q = newQueue();
     int qval;
     int qdepth;
