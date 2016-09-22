@@ -26,7 +26,7 @@ HunterView newHunterView(char *pastPlays, PlayerMessage messages[])
 void disposeHunterView(HunterView toBeDeleted)
 {
     disposeGameView (toBeDeleted->game);
-    free (toBeDelted);
+    free (toBeDeleted);
 }
 
 
@@ -59,7 +59,7 @@ int howHealthyIs(HunterView currentView, PlayerID player)
 // Get the current location id of a given player
 LocationID whereIs(HunterView currentView, PlayerID player)
 {
-    return getLocation(currentView->g, player);
+    return getLocation(currentView->game, player);
 }
 
 //// Functions that return information about the history of the game
@@ -68,7 +68,7 @@ LocationID whereIs(HunterView currentView, PlayerID player)
 void giveMeTheTrail(HunterView currentView, PlayerID player,
                             LocationID trail[TRAIL_SIZE])
 {
-    getHistory(currentView->g, player, trail);
+    getHistory(currentView->game, player, trail);
 }
 
 //// Functions that query the map to find information about connectivity
@@ -78,7 +78,7 @@ LocationID *whereCanIgo(HunterView currentView, int *numLocations,
                         int road, int rail, int sea)
 {
     PlayerID player = whoAmI(currentView);
-    int health = howHealthIs(currentView, player);
+    int health = howHealthyIs(currentView, player);
     int round = giveMeTheRound(currentView);
     LocationID location = whereIs(currentView, player);
 
