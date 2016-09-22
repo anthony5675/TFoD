@@ -214,10 +214,13 @@ static void fillTrails (GameView gameView, char *pastPlays){
     //Filling the trail arrays.
     int m = 0, n = 0;
     int o = (gameView->turns % NUM_PLAYERS) - 1;
-    int index = sizeof(pastPlays) - 6;
-    if (o < 0) {
-        o = 0;
+    int index = strlen(pastPlays) - 6;
+    if (gameView->turns == 0) {
+        o = PLAYER_LORD_GODALMING;
         index = 0;
+    }
+    if (o == -1) {
+        o = PLAYER_DRACULA;
     }
     char *abbrev = malloc (3*sizeof(char));
     assert(abbrev != NULL);
