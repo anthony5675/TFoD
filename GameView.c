@@ -11,7 +11,7 @@
 #include "Map.h"
 #include "set.h"
 #include "queue.h"
-//#define NUM_TRAPS 2 // either vamp or trap
+#define NUM_TRAPS 2 // either vamp or trap
 //#define TRAPS 0
 //#define vamps 1
 #define MOVE_LENGTH 8
@@ -309,19 +309,17 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
     int neibsize;
     LocationID *locarray = malloc(sizeof(LocationID)*numV(currentView->m));
     if(rail == TRUE && player != PLAYER_DRACULA){//adds rails
-        enterQueue(q,curID);
-        q->front->depth = 0;
+        enterQueue(q,curID,0);
         while(!emptyQueue(q)){
-            qdepth = q->front->depth;
+            qdepth = getDepth(q);
             qval = leaveQueue(q);
-            if (qdepth < (curRound+player)%4){
+            if (qdepth < (currentView->currRound+player)%4){
                 neibsize = typeNeighbours(currentView->m, qval, RAIL, locarray);
                 int i;
                 for (i = 0; i < neibsize; i++){
                     if(!isElem(mainset,locarray[i])){
-                        InsertInto(mainset,locarray[i]);
-                        enterQueue(q,locarray[i]);
-                        q->back->depth++;
+                        insertInto(mainset,locarray[i]);
+                        enterQueue(q,locarray[i],qdepth+1);
                     }
 
                 }
@@ -329,15 +327,16 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
         }
     }
     neibsize = typeNeighbours(currentView->m, from, BOAT, locarray);
+    int i;
     for (i = 0; i < neibsize; i++){
         if(!isElem(mainset,locarray[i] && (player != PLAYER_DRACULA || locarray[i] != ST_JOSEPH_AND_ST_MARYS))){
-            InsertInto(mainset,locarray[i]);
+            insertInto(mainset,locarray[i]);
         }
     } 
     neibsize = typeNeighbours(currentView->m, from, ROAD, locarray);
     for (i = 0; i < neibsize; i++){
         if(!isElem(mainset,locarray[i] && (player != PLAYER_DRACULA || locarray[i] != ST_JOSEPH_AND_ST_MARYS))){
-            InsertInto(mainset,locarray[i]);
+            insertInto(mainset,locarray[i]);
         }
     }
 
@@ -346,7 +345,7 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
 
     LocationID *giveSet = getSet(mainset);
     disposeSet(mainset);
-    disposeQueue(mainqueue);
+    disposeQueue(q);
     free(locarray);
     return giveSet;
 }

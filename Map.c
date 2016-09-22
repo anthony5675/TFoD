@@ -347,7 +347,7 @@ static void addConnections(Map g)
 
 //non map.c native functions
 //sets locations to  return size array of location IDs corresponding to directly connected locations of a certain type
-int typeNeighbours(Map g, locationID from, TransportID type, locationID *locations){
+int typeNeighbours(Map g, LocationID from, TransportID type, LocationID *locations){
    int num = 0;
    VList curLink= g->connections[from];
    while(curLink != NULL){//inserts boat and road connections into mainset

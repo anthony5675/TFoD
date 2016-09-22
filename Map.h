@@ -20,7 +20,7 @@ void disposeMap(Map g);
 void showMap(Map g); 
 int  numV(Map g);
 int  numE(Map g, TransportID t);
-int typeNeighbours(Map g, locationID from, TransportID type, locationID *locations);
+int typeNeighbours(Map g, LocationID from, TransportID type, LocationID *locations);
 
 
 #endif
