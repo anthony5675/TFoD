@@ -62,7 +62,7 @@ LocationID whereIs(DracView currentView, PlayerID player)
     giveMeTheTrail (currentView, player, trail);
 
     //Doubleback: 
-    //doubleback_n gives returns dracula to the nth last move from trail.
+    //doubleback_n gives returns dracula n moves back.
 
     if (player == PLAYER_DRACULA) {
         if (location == TELEPORT) {
@@ -98,7 +98,7 @@ void lastMove(DracView currentView, PlayerID player,
 void whatsThere(DracView currentView, LocationID where,
                          int *numTraps, int *numVamps)
 {
-    
+
 }
 
 //// Functions that return information about the history of the game
