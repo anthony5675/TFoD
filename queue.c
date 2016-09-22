@@ -24,7 +24,7 @@ typedef struct QueueRep {
 
 Queue newQueue();
 void disposeQueue(Queue);
-void enterQueue(Queue,int,depth);
+void enterQueue(Queue,int,int);
 int leaveQueue(Queue);
 int  emptyQueue(Queue);
 void showQueue(Queue q);
@@ -105,7 +105,7 @@ void showQueue(Queue q)
 		int id = 0;
 		curr = q->front;
 		while (curr != NULL) {
-			printf("[%03d] %s\n", id, curr->val);
+			printf("[%03d] %d\n", id, curr->val);
 			id++;
 			curr = curr->next;
 		}
@@ -126,7 +126,6 @@ static Link newNode(int str)
 static void disposeNode(Link curr)
 {
 	assert(curr != NULL);
-	free(curr->val);
 	free(curr);
 }
 //returns depth of first element in queue

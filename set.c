@@ -90,7 +90,7 @@ void dropFrom(Set s, int str)
 {
 	assert(s != NULL);
 	Link curr, prev;
-	int found = findNode(s->elems,int,&curr,&prev);
+	int found = findNode(s->elems,str,&curr,&prev);
 	if (!found) return;
 	s->nelems--;
 	if (prev == NULL)
@@ -142,7 +142,7 @@ static Link newNode(int str)
 {
 	Link new = malloc(sizeof(Node));
 	assert(new != NULL);
-	new->val = val;
+	new->val = str;
 	new->next = NULL;
 	return new;
 }
@@ -150,7 +150,6 @@ static Link newNode(int str)
 static void disposeNode(Link curr)
 {
 	assert(curr != NULL);
-	free(curr->val);
 	free(curr);
 }
 
@@ -171,7 +170,7 @@ static int findNode(Link list, int str, Link *cur, Link *pre)
 }
 
 int *getSet(Set s){
-	int *locs = malloc(sizeof(int)*nElems(s))
+	int *locs = malloc(sizeof(int)*nElems(s));
 	int i = 0;
 	Link elems;
 	for(elems = s->elems; elems != NULL; elems = elems->next){
