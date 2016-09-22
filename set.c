@@ -6,6 +6,8 @@
 #include <assert.h>
 #include <string.h>
 #include "set.h"
+#include "Places.h"
+
 
 #define strEQ(s,t) (s == t)
 #define strLT(s,t) (s < t)
@@ -166,4 +168,16 @@ static int findNode(Link list, int str, Link *cur, Link *pre)
 	}
 	*cur = curr; *pre = prev;
 	return (curr != NULL && strEQ(str,curr->val));
+}
+
+int *getSet(Set s){
+	int *locs = malloc(sizeof(int)*nElems(s))
+	int i = 0;
+	Link elems;
+	for(elems = s->elems; elems != NULL; elems = elems->next){
+		locs[i] = elems->val;
+		i++;
+	}
+	return locs;
+
 }

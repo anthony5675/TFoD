@@ -15,5 +15,6 @@ void dropFrom(Set,int);
 int  isElem(Set,int);
 int  nElems(Set);
 void showSet(Set);
+int *getSet(Set);
 
 #endif
