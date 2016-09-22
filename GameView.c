@@ -52,7 +52,7 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
     gameView->score -= gameView->currRound; //-1 loss for each of D's turn
     
     //New Stuff
-    gameView->currPlayer = turns % 5;
+    //gameView->currPlayer = turns % 5;
     
     int i = 0;
     playerLocation(gameView, &pastPlays);
@@ -204,15 +204,6 @@ LocationID getLocation(GameView currentView, PlayerID player)
 
 static void playerLocation (GameView gameView, char *pastPlays) {
     char *ptr = pastPlays;
-
-    /*
-    EXAMPLE:
-    GMN.... SPL.... HAM....
-    G is ptr
-    M is ptr+1
-    N is ptr+2
-    this function grabs location and puts into location array
-     */
 
     while (*ptr != '\0') {
         if (*ptr == 'G') {
@@ -413,11 +404,11 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
     LocationID *locations = malloc(sizeof(LocationID)*(nElems(mainset)));
     Link l = mainset->elems;
     int i = 0;
-        while(l != NULL){//fills array with mainset
-            locations[i] = l->val;
-            l = l->next;
-        }
+    while(l != NULL){//fills array with mainset
+        locations[i] = l->val;
+        l = l->next;
     }
+
     disposeSet(mainset);
     disposeQueue(mainqueue);
     return locations;
