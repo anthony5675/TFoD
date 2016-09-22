@@ -354,7 +354,6 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
             }
         }
     }
-    showSet(mainset);
     if(sea){
         neibsize = typeNeighbours(currentView->m, from, BOAT, locarray);
         int i;
@@ -373,7 +372,6 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
             }
         }
     }
-    showSet(mainset);
 
 
 
