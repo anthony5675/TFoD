@@ -217,7 +217,12 @@ int getHealth(GameView currentView, PlayerID player)
 // Get the current location id of a given player
 LocationID getLocation(GameView currentView, PlayerID player)
 {
-    
+    //for debugging purposes
+    //copying currLocation array
+    LocationID testArray[NUM_PLAYERS];
+    for (i = 0; i < NUM_PLAYERS; i++) {
+        testArray[i] = currentView->currLocation[i];
+    }
     return currentView->currLocation[player];
 }
 
