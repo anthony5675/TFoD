@@ -219,10 +219,13 @@ LocationID getLocation(GameView currentView, PlayerID player)
 {
     //for debugging purposes
     //copying currLocation array
+    int i = 0;
     LocationID testArray[NUM_PLAYERS];
-    for (i = 0; i < NUM_PLAYERS; i++) {
+    while (i < NUM_PLAYERS) {
         testArray[i] = currentView->currLocation[i];
+        i++;
     }
+    testArray[0] = testArray[0];
     return currentView->currLocation[player];
 }
 
