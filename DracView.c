@@ -161,9 +161,6 @@ static void calcTraps (char *pastPlays, DracView gameView) {
     } 
 
     while (*ptr != '\0') {
-        if (*ptr == ' ') {
-            ptr++;
-        }
         char *abbrev = malloc(3*sizeof(char));
         abbrev[0] = *(ptr+1);
         abbrev[1] = *(ptr+2);
@@ -196,6 +193,7 @@ static void calcTraps (char *pastPlays, DracView gameView) {
             }
         }
         free(abbrev);
-        ptr += MOVE_LENGTH;
+        ptr += (MOVE_LENGTH + 1);
     }
 }
+

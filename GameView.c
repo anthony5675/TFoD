@@ -59,7 +59,7 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
             gameView->health[l] = GAME_START_BLOOD_POINTS ;
         } else {
             gameView->health[l] = GAME_START_HUNTER_LIFE_POINTS;
-        };
+        }
     }
     
     int i = 0, j = 0, k = 0;
@@ -87,7 +87,7 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
                         } break;                      
                 }
                 //Checking if the Hunter is resting.
-                if (j % 8 == 1) {
+                if (j % 8 == 1 && (i+j) >= 40) {
                     if (pastPlays[i+j] == pastPlays[i+j-40] && pastPlays[i+j+1] == pastPlays[i+j+1-40]) {
                         gameView->health[i/(MOVE_LENGTH) % NUM_PLAYERS] += LIFE_GAIN_REST;
                         if (gameView->health[i/(MOVE_LENGTH) % NUM_PLAYERS] > 9) {
@@ -170,8 +170,10 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
             }
         }
         i += 8;
-    }
-                                 
+        if (pastPlays[i-1] == '\0') {
+            break;
+        }
+    }          
     return gameView;
 }
      
