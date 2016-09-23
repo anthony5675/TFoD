@@ -179,7 +179,6 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
 // Frees all memory previously allocated for the GameView toBeDeleted
 void disposeGameView(GameView toBeDeleted)
 {
-    //COMPLETE THIS IMPLEMENTATION
     free( toBeDeleted);
 }
 
@@ -219,13 +218,14 @@ LocationID getLocation(GameView currentView, PlayerID player)
 {
     //for debugging purposes
     //copying currLocation array
-    int i = 0;
+    /*int i = 0;
     LocationID testArray[NUM_PLAYERS];
     while (i < NUM_PLAYERS) {
         testArray[i] = currentView->currLocation[i];
         i++;
     }
     testArray[0] = testArray[0];
+    */
     return currentView->currLocation[player];
 }
 
