@@ -9,7 +9,7 @@
 void decideDraculaMove(DracView gameState)
 {
     if (giveMeTheRound(gameState) == 0) {
-        registerBestPlay("CD","Mwuhahahaha");
+        registerBestPlay("FL","Mwuhahahaha");
     } else {
         switch (whereIs(gameState, PLAYER_DRACULA)) {
             case CASTLE_DRACULA:
@@ -47,3 +47,4 @@ void decideDraculaMove(DracView gameState)
         }
     }
 }
+//TODO move to valid location furthest from any hunter- use breadth first search
