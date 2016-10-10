@@ -13,7 +13,7 @@ void decideDraculaMove(DracView gameState)
     } else {
         switch (whereIs(gameState, PLAYER_DRACULA)) {
             case CASTLE_DRACULA:
-                registerBestPlay("GA", ""); break;
+                registerBestPlay("GA", "Im not in dublin"); break;
             case GALATZ:
                 registerBestPlay("BC", ""); break;
             case BUCHAREST:

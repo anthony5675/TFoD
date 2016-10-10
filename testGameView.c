@@ -110,7 +110,7 @@ int main()
     printf("passed\n");
     disposeGameView(gv);
 
-    
+
     printf("Testing to see it is turn zero until everyone has had a turn");
     PlayerMessage messages6[] = {"Hello","Rubbish","Stuff",""};
     gv = newGameView("GST.... SAO.... HZU.... MBB....", messages6);
@@ -137,6 +137,7 @@ int main()
     assert(getHealth(gv, PLAYER_DRACULA) ==
             GAME_START_BLOOD_POINTS - 3 * LIFE_LOSS_HUNTER_ENCOUNTER);
     // the hunter should be zero
+    printf("%d\n", getHealth(gv, PLAYER_LORD_GODALMING));
     assert(getHealth(gv, PLAYER_LORD_GODALMING)  <= 0);
     // the game score shoouldn't have changed yet
     assert(getScore(gv) == GAME_START_SCORE - SCORE_LOSS_HUNTER_HOSPITAL - 3);
@@ -220,7 +221,7 @@ int main()
     assert(getHealth(gv, PLAYER_DRACULA) == GAME_START_BLOOD_POINTS - 2 * LIFE_LOSS_HUNTER_ENCOUNTER);
     printf("passed\n");
     disposeGameView(gv);
-    printf("\n");
+    printf("\n");   
     return 0;
 }
 
