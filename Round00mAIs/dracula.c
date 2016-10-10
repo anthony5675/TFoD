@@ -8,6 +8,16 @@
 
 void decideDraculaMove(DracView gameState)
 {
+    //data for use in decideMove
+    int *hunterPos[5];
+    int asize;
+    int *validMoves = whereCanIGo(gameState, &asize, 1, 1);
+    int i;
+    for(i = 0; i < 5;i++){
+        hunterPos[i] = whereIs(gameState,i);
+    }
+
+
     if (giveMeTheRound(gameState) == 0) {
         registerBestPlay("FL","Mwuhahahaha");
     } else {
