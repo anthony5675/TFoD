@@ -26,8 +26,7 @@ void decideDraculaMove(DracView gameState)
     } else {
         switch (whereIs(gameState, PLAYER_DRACULA)) {
             case LISBON:
-                registerBestPlay("CA", "Im not in dublin"); break;
-            
+                registerBestPlay("CA", ""); break;
             case CADIZ:
                 registerBestPlay("MA", "1"); break;
             case MADRID:
@@ -40,35 +39,35 @@ void decideDraculaMove(DracView gameState)
                 break;
             case ALICANTE:
                 registerBestPlay("D1", "m"); break;
-            case ALICANTE:
-                registerBestPlay("GR", ""); break;
-            case SOFIA:
-                registerBestPlay("VA", ""); break;
-            case VALONA:
-                registerBestPlay("IO", ""); break;
-            case IONIAN_SEA:
-                registerBestPlay("AS", ""); break;
-            case ADRIATIC_SEA:
-                registerBestPlay("BI", ""); break;
-            case BARI:
-                registerBestPlay("NP", ""); break;
-            case NAPLES:
-                registerBestPlay("RO", ""); break;
-            case ROME:
-                registerBestPlay("FL", ""); break;
-            case FLORENCE:
-                registerBestPlay("VE", ""); break;
-            case VENICE:
-                registerBestPlay("MU", ""); break;
-            case MUNICH:
-                registerBestPlay("VI", ""); break;
-            case VIENNA:
+            case GRANADA:
+                if(strcmp(message,"HI") == 0){
+                    registerBestPlay("HI","");//hides in granada
+                }
+                else{
+                    registerBestPlay("TP", "");//tps from granada to CD
+                }
+            case CASTLE_DRACULA:
+                registerBestPlay("KL", ""); break;
+            case KLAUSENBERG:
                 registerBestPlay("BD", ""); break;
             case BUDAPEST:
-                registerBestPlay("KL", ""); break;               
-            case KLAUSENBURG:
-                registerBestPlay("CD", ""); break; 
-                
+                registerBestPlay("VI", ""); break;
+            case VIENNA:
+                registerBestPlay("MU", ""); break;
+            case MUNICH:
+                registerBestPlay("ZU", ""); break;
+            case ZURICH:
+                registerBestPlay("GE", ""); break;
+            case GENEVA:
+                registerBestPlay("CF", ""); break;
+            case CLERMONT_FERRAND:
+                registerBestPlay("TO", ""); break;
+            case TOULOUSE:
+                registerBestPlay("SR", ""); break;
+            case SARAGOSSA:
+                registerBestPlay("SN", ""); break;
+            case SANTANDER:
+                registerBestPlay("LS", ""); break;                
         }
     }
 }
