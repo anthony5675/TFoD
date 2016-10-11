@@ -20,7 +20,7 @@ void decideDraculaMove(DracView gameState)
     */
 
     PlayerMessage array;
-    giveMessage(gameState, whoAmI(gameState), array);
+    giveMessage(gameState, PLAYER_DRACULA, array);
     
     char *forw = "";
     char *backw = "mn";
@@ -51,7 +51,7 @@ void decideDraculaMove(DracView gameState)
                 }
             case CASTLE_DRACULA:
                 registerBestPlay("KL", forw); break;
-            case KLAUSENBERG:
+            case KLAUSENBURG:
                 registerBestPlay("BD", forw); break;
             case BUDAPEST:
                 registerBestPlay("VI", forw); break;
