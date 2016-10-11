@@ -31,15 +31,15 @@ void decideDraculaMove(DracView gameState)
             case CADIZ:
                 registerBestPlay("MA", "1"); break;
             case MADRID:
-                if(strcmp()){
-
+                if(strcmp(message,"m") == 0){
+                    registerBestPlay("GR","");
                 }
                 else{
-
+                    registerBestPlay("AL", "");
                 }
-                registerBestPlay("AL", ""); break;
+                break;
             case ALICANTE:
-                registerBestPlay("D1", "M"); break;
+                registerBestPlay("D1", "m"); break;
             case ALICANTE:
                 registerBestPlay("GR", ""); break;
             case SOFIA:
